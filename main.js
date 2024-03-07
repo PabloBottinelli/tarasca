@@ -1,10 +1,13 @@
-const { app, BrowserWindow} = require('electron') 
+const { app, BrowserWindow, screen} = require('electron') 
 const { setMainMenu } = require('./menu.js')
 
 const createWindow = () => {
+    const mainScreen = screen.getPrimaryDisplay();
+    const dimensions = mainScreen.workAreaSize;
+
     const window = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: dimensions.width,
+        height: dimensions.height,
         // webPreferences: { // para precargar codigo
         //     preload
         // }

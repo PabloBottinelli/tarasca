@@ -16,5 +16,8 @@
   },
   "eslintConfig": {
     "extends": "standard"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1"
   }
 }

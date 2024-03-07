@@ -7,3 +7,4 @@ const $ = selector => document.querySelector(selector)
 //     const count = +$count.innerHTML //el + lo convierte a numero
 //     $count.innerHTML = count + 1
 // })
+
