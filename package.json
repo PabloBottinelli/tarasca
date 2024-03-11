@@ -1,23 +1,18 @@
 {
-  "name": "tarasca",
+  "name": "tarasca-js2",
   "version": "1.0.0",
-  "description": "Tarasca es un proyecto personal inicial para poner en mi portfolio de programador y aprender sobre node js, electron y sql\r A su vez, tiene el objetivo de ayudarme a mi y a mi mejor amigo con nuestras finanzas personales\r La idea es empezar con algo simple y de a poco ir sumando funcionalidades mas complejas de calculos y datos financieros",
-  "main": "main.js",
+  "description": "",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "electron": "^28.2.3",
-    "standard": "^17.1.0"
-  },
-  "eslintConfig": {
-    "extends": "standard"
-  },
   "dependencies": {
-    "chart.js": "^4.4.1"
+    "bootstrap": "^5.3.3",
+    "electron": "^29.1.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "promise-mysql": "^5.2.0"
   }
 }

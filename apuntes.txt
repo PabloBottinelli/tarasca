@@ -1,0 +1,6 @@
+1. npm init -y para que crear el package.json
+2. npm i electron promise-mysql electron-reload
+promise-mysql para poder usar async await
+electron-reload para poder recargar la app al modificar el codigo
+3. para activar mysql buscar xampp en windows, y activar apache y mysql
+http://localhost/phpmyadmin

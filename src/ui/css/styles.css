@@ -12,6 +12,8 @@ body {
     height: 100vh;
 }
 
+/* HEADER */
+
 #header {
     width: 100%;
     height: 30%;
@@ -49,20 +51,19 @@ body {
     text-align: right; 
 } 
  
-#switch-txt { 
-    color: white; 
-    font-size: 23px; 
-    font-weight: 400; 
-    position: absolute; 
-    right: 50px; 
-    top: -1px;
+.form-check-label{
+    color: white;
 }
+
+/* MAIN */
 
 #main {
     width: 100%;
     height: 70%;
     display: flex;
 }
+
+/* IZQUIERDA */
 
 #detail {
     background-color: #dddddd;
@@ -98,6 +99,26 @@ body {
     transform: scale(1.2);
 }
 
+/* FORM  */
+
+.formButton{
+    background: none;
+    border: none;
+}
+
+.form-check-label img{
+    width: 20px;
+    height: 20px;
+    color: black;
+}
+
+.radio-cnt{
+    display: block;
+    padding: 0.5rem 1.1rem;
+}
+
+/* ITEMS IZQUIERDA */
+
 .item img {
     width: 30px;
 }
@@ -112,10 +133,6 @@ body {
     margin-bottom: 25px;
     cursor: pointer;
     border: 2px solid transparent;
-}
-
-.item:hover {
-    border: 2px solid #3F0066;
 }
 
 .cripto {
@@ -134,6 +151,22 @@ body {
     background-color: #3F3CFF;
 }
 
+.cripto:hover {
+    background-color: #ff1f1f;
+}
+
+.bank:hover {
+    background-color: #ff6e1b;
+}
+
+.bank2:hover {
+    background-color: #00ff1a;
+}
+
+.invest:hover {
+    background-color: #231fff;
+}
+
 .item img{
     filter: invert(100%);
 }
@@ -149,6 +182,8 @@ body {
 .item-detail img{
     margin-left: 10px;
     margin-right: 20px;
+    height: 40px;
+    width: 40px;
 }
 
 .item-detail h3 {
@@ -167,6 +202,8 @@ body {
     margin-right: 10px;
 }
 
+/* DERECHA  */
+ 
 #graphic {
     width: 70%;
     padding: 30px;
@@ -188,3 +225,4 @@ body {
     width: 100%;
     height: 90%;
 }
+
