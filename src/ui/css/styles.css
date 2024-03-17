@@ -86,26 +86,22 @@ body {
     float: right;
 }
 
-#buttons img {
+.formButton {
     width: 20px;
     height: 22.84px;
     color: black;
     margin-left: 15px;
     cursor: pointer;
     transition: all 500ms ease;
-}
-
-#buttons img:hover {
-    transform: scale(1.2);
-}
-
-/* FORM  */
-
-.formButton{
     background: none;
     border: none;
 }
 
+.formButton:hover {
+    transform: scale(1.2);
+}
+
+/* FORM  */
 .form-check-label img{
     width: 20px;
     height: 20px;
@@ -115,6 +111,10 @@ body {
 .radio-cnt{
     display: block;
     padding: 0.5rem 1.1rem;
+}
+
+#editButton, #deleteButton{
+    display: none;
 }
 
 /* ITEMS IZQUIERDA */
@@ -133,38 +133,6 @@ body {
     margin-bottom: 25px;
     cursor: pointer;
     border: 2px solid transparent;
-}
-
-.cripto {
-    background-color: #FF3C3C;
-}
-
-.bank {
-    background-color: #FF823C;
-}
-
-.bank2 {
-    background-color: #25FF3A;
-}
-
-.invest {
-    background-color: #3F3CFF;
-}
-
-.cripto:hover {
-    background-color: #ff1f1f;
-}
-
-.bank:hover {
-    background-color: #ff6e1b;
-}
-
-.bank2:hover {
-    background-color: #00ff1a;
-}
-
-.invest:hover {
-    background-color: #231fff;
 }
 
 .item img{

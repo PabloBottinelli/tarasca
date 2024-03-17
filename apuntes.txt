@@ -4,3 +4,8 @@ promise-mysql para poder usar async await
 electron-reload para poder recargar la app al modificar el codigo
 3. para activar mysql buscar xampp en windows, y activar apache y mysql
 http://localhost/phpmyadmin
+
+a traves de main electron crea un proceso principal y tiene acceso al sistema operativo
+al crear una ventana y unirla con un html, hay un renderer process, mediante el cual podemos acceder a los recursos de la ventana
+entonces esta el proceso ppal y el renderer
+entonces si quiero ejecutar alguna funcion en el proceso principal tengo que relacionarla de alguna forma con el renderer (para eso remote)

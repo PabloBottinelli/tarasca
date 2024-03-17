@@ -7,8 +7,8 @@ const connection = mysql.createConnection({
     database: 'tarasca'
 })
 
-function getConecction(){
+function getConnection(){
     return connection;
 }
 
-module.exports = { getConecction }
+module.exports = { getConnection }
