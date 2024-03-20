@@ -10,6 +10,7 @@
 
 body {
     height: 100vh;
+    overflow: hidden;
 }
 
 /* HEADER */
@@ -69,12 +70,14 @@ body {
     background-color: #dddddd;
     width: 30%;
     height: 100%;
-    padding: 30px;
+    padding: 30px 0 30px 0;
 }
 
 #detail-top {
     width: 100%;
     height: 10%;
+    border-bottom: 1px solid rgb(167, 167, 167);
+    padding: 0 30px 0 30px;
 }
 
 #detail-top h2 {
@@ -99,6 +102,14 @@ body {
 
 .formButton:hover {
     transform: scale(1.2);
+}
+
+#detail-bottom{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 0 25px 0 25px;
 }
 
 /* FORM  */
@@ -130,7 +141,7 @@ body {
     padding: 0px 20px 0px 20px;
     color: white;
     height: 80px;
-    margin-bottom: 25px;
+    margin-top: 25px;
     cursor: pointer;
     border: 2px solid transparent;
 }

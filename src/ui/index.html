@@ -2,13 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
         <title>Tarasca</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <script src="chart.js" defer ></script>
     </head>
     <body>
@@ -28,7 +29,7 @@
                         <button class="formButton" id="editButton">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
-                        <button class="formButton" id="deleteButton">
+                        <button class="formButton" id="deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
                         <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#formModal">
@@ -50,7 +51,7 @@
             </section>
         </section>
         
-        <!-- Modal -->
+        <!-- Form Modal -->
         <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -93,12 +94,31 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" form="newItemForm">Guardar</button>
+                        <button type="submit" class="btn btn-primary" form="newItemForm" data-bs-dismiss="modal">Guardar</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Delete Modal -->
+        <div class="modal" tabindex="-1" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Seguro que deseas eliminar este item?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirmDeleteButton">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="renderer.js"></script>
-    
     </body>
 </html>

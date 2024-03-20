@@ -13,8 +13,11 @@ const itemList = document.getElementById('detail-bottom')
 let selectedItem = null;
 const editButton = document.getElementById('editButton')
 const deleteButton = document.getElementById('deleteButton')
+const confirmDeleteButton = document.getElementById('confirmDeleteButton')
 
-let items = [];
+editButton.addEventListener('click', function(event) {
+    event.stopPropagation()
+})
 
 // FORM
 document.querySelectorAll('input[name="inlineRadioOptions"]').forEach((radio) => {
@@ -34,6 +37,8 @@ newItemForm.addEventListener('submit', (e) => {
     }
 
     const result = ipcRenderer.sendSync('createItem', newItem);
+    newItemForm.reset()
+    getItems()
 })
 
 // RENDER
@@ -41,7 +46,7 @@ function renderItems(items) {
     itemList.innerHTML = ""
     items.forEach((i) => {
       itemList.innerHTML += `
-        <div id="${i.id}" class="item" style="background-color: ${hexToRGBA(i.color, 0.9)};">
+        <div id="${i.id}" class="item animate__animated animate__bounceInLeft" style="background-color: ${hexToRGBA(i.color, 0.9)};">
             <div class="item-detail">
                 <img src="media/${i.icon}" alt="Icon">
                 <h3>${i.entity}</h3>
@@ -57,8 +62,8 @@ function renderItems(items) {
     itemElements.forEach((itemElement) => {
         itemElement.addEventListener('mouseover', function() {
             if(selectedItem != itemElement){
-                const computedStyle = window.getComputedStyle(itemElement);
-                const backgroundColor = computedStyle.backgroundColor;
+                const computedStyle = window.getComputedStyle(itemElement)
+                const backgroundColor = computedStyle.backgroundColor
                 const [r, g, b, _] = backgroundColor.match(/\d+/g)
                 itemElement.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${1})`
                 itemElement.style.border = '2px solid #272727'
@@ -67,8 +72,8 @@ function renderItems(items) {
     
         itemElement.addEventListener('mouseout', function() {
             if(selectedItem != itemElement){
-                const computedStyle = window.getComputedStyle(itemElement);
-                const backgroundColor = computedStyle.backgroundColor;
+                const computedStyle = window.getComputedStyle(itemElement)
+                const backgroundColor = computedStyle.backgroundColor
                 const [r, g, b, _] = backgroundColor.match(/\d+/g)
                 itemElement.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${0.9})`
                 itemElement.style.border = '2px solid transparent'
@@ -91,29 +96,44 @@ function renderItems(items) {
 
 function hexToRGBA(hex, alpha) {
     // Elimino el símbolo '#' si está presente
-    hex = hex.replace('#', '');
+    hex = hex.replace('#', '')
 
     // Convierto el valor hexadecimal a valores numéricos RGB
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
+    const r = parseInt(hex.substring(0, 2), 16)
+    const g = parseInt(hex.substring(2, 4), 16)
+    const b = parseInt(hex.substring(4, 6), 16)
 
     // Creo la cadena RGBA utilizando los valores RGB y el valor alfa
     return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
 document.addEventListener('click', function(event) {
-    if (selectedItem && !selectedItem.contains(event.target)) {
-        selectedItem.style.border = '2px solid transparent';
+    if(selectedItem && !selectedItem.contains(event.target)){
+        selectedItem.style.border = '2px solid transparent'
         editButton.style.display = 'none'
         deleteButton.style.display = 'none'
-        selectedItem = null;
+        selectedItem = null
     }
-});
+})
 
+// GET
 function getItems(){
     items = ipcRenderer.sendSync('getItems')
     renderItems(items)
+}
+
+// DELETE 
+deleteButton.addEventListener('click', function(event){
+    event.stopPropagation()
+})
+
+confirmDeleteButton.addEventListener('click', function(event){
+    deleteItem(selectedItem.id)
+})
+
+function deleteItem(id){
+    const result = ipcRenderer.sendSync('deleteItem', id)
+    getItems()
 }
 
 function init(){

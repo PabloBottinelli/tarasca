@@ -37,6 +37,19 @@ ipcMain.on('getItems', async (event, item) => {
   }
 })
 
+ipcMain.on('deleteItem', async(event, id) => {
+  try{
+    const conn = await getConnection()
+    const result = await conn.query('DELETE FROM item WHERE id = ?', id)
+    event.returnValue = result
+  }catch(error){
+    new Notification({
+      title: 'Error',
+      body: error
+    }).show()
+  }
+})
+
 function createWindow() {
   const mainScreen = screen.getPrimaryDisplay()
   const dimensions = mainScreen.workAreaSize
