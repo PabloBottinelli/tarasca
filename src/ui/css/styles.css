@@ -20,10 +20,10 @@ body {
     height: 30%;
     padding: 25px;
     background: linear-gradient(#8C00A2, #3F0066);
-    display: flex;
+    /* display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    text-align: center;
+    text-align: center; */
 }
 
 #header h1 {
@@ -68,7 +68,7 @@ body {
 
 #detail {
     background-color: #dddddd;
-    width: 30%;
+    width: 35%;
     height: 100%;
     padding: 30px 0 30px 0;
 }
@@ -126,6 +126,14 @@ body {
 
 #editButton, #deleteButton{
     display: none;
+}
+
+.form-label{
+    width: 100%;
+}
+
+.dropdown-item{
+    cursor: pointer;
 }
 
 /* ITEMS IZQUIERDA */
@@ -205,3 +213,10 @@ body {
     height: 90%;
 }
 
+#dropdownButton{
+    font-size: 20px;
+}
+
+.dropdown-menu{
+    width: 250px;
+}

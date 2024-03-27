@@ -24,6 +24,28 @@ ipcMain.on('createItem', async (event, item) => {
   }
 })
 
+ipcMain.on('editItem', async (event, id, item) => {
+  try {
+    const conn = await getConnection()
+    item.value = parseFloat(item.value)
+    const result = await conn.query('UPDATE item SET ? WHERE id = ?', [item, id])
+
+    new Notification({
+      title: 'Completado',
+      body: 'El item se modificó correctamente'
+    }).show()
+
+    item.id = result.insertId
+    event.returnValue = item
+
+  } catch(error) {
+    new Notification({
+      title: 'Error',
+      body: error
+    }).show()
+  }
+})
+
 ipcMain.on('getItems', async (event, item) => {
   try {
     const conn = await getConnection()
@@ -41,7 +63,26 @@ ipcMain.on('deleteItem', async(event, id) => {
   try{
     const conn = await getConnection()
     const result = await conn.query('DELETE FROM item WHERE id = ?', id)
+
+    new Notification({
+      title: 'Completado',
+      body: 'El item se eliminó correctamente'
+    }).show()
+
     event.returnValue = result
+  }catch(error){
+    new Notification({
+      title: 'Error',
+      body: error
+    }).show()
+  }
+})
+
+ipcMain.on('getItemById', async(event, id) => {
+  try{
+    const conn = await getConnection()
+    const result = await conn.query('SELECT * FROM item WHERE id = ?', id)
+    event.returnValue = result[0]
   }catch(error){
     new Notification({
       title: 'Error',
