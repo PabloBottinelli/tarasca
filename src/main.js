@@ -2,11 +2,11 @@ const {BrowserWindow, screen, Notification, ipcMain} = require('electron')
 const { setMainMenu } = require('./ui/menu.js')
 const { getConnection } = require('./database.js')
 
-ipcMain.on('createItem', async (event, item) => {
+ipcMain.on('createItem', async (event, item, table) => {
   try {
     const conn = await getConnection()
     item.value = parseFloat(item.value)
-    const result = await conn.query('INSERT INTO item SET ?', item)
+    const result = await conn.query('INSERT INTO ?? SET ?', [table, item])
 
     new Notification({
       title: 'Completado',
@@ -19,16 +19,16 @@ ipcMain.on('createItem', async (event, item) => {
   } catch(error) {
     new Notification({
       title: 'Error',
-      body: error
+      body: error.message
     }).show()
   }
 })
 
-ipcMain.on('editItem', async (event, id, item) => {
+ipcMain.on('editItem', async (event, id, item, table) => {
   try {
     const conn = await getConnection()
     item.value = parseFloat(item.value)
-    const result = await conn.query('UPDATE item SET ? WHERE id = ?', [item, id])
+    const result = await conn.query('UPDATE ?? SET ? WHERE id = ?', [table, item, id])
 
     new Notification({
       title: 'Completado',
@@ -41,28 +41,28 @@ ipcMain.on('editItem', async (event, id, item) => {
   } catch(error) {
     new Notification({
       title: 'Error',
-      body: error
+      body: error.message
     }).show()
   }
 })
 
-ipcMain.on('getItems', async (event, item) => {
+ipcMain.on('getItems', async (event, table) => {
   try {
     const conn = await getConnection()
-    const results = await conn.query('SELECT * FROM item')
+    const results = await conn.query('SELECT * FROM ??', table)
     event.returnValue = results
   }catch(error){
     new Notification({
       title: 'Error',
-      body: error
+      body: error.message
     }).show()
   }
 })
 
-ipcMain.on('deleteItem', async(event, id) => {
+ipcMain.on('deleteItem', async(event, id, table) => {
   try{
     const conn = await getConnection()
-    const result = await conn.query('DELETE FROM item WHERE id = ?', id)
+    const result = await conn.query('DELETE FROM ?? WHERE id = ?', [table, id])
 
     new Notification({
       title: 'Completado',
@@ -73,20 +73,20 @@ ipcMain.on('deleteItem', async(event, id) => {
   }catch(error){
     new Notification({
       title: 'Error',
-      body: error
+      body: error.message
     }).show()
   }
 })
 
-ipcMain.on('getItemById', async(event, id) => {
+ipcMain.on('getItemById', async(event, id, table) => {
   try{
     const conn = await getConnection()
-    const result = await conn.query('SELECT * FROM item WHERE id = ?', id)
+    const result = await conn.query('SELECT * FROM ?? WHERE id = ?', [table, id])
     event.returnValue = result[0]
   }catch(error){
     new Notification({
       title: 'Error',
-      body: error
+      body: error.message
     }).show()
   }
 })

@@ -2,34 +2,55 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.bluelytics.com.ar; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.bluelytics.com.ar; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
         <title>Tarasca</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-        <script src="chart.js" defer ></script>
     </head>
     <body>
         <header id="header">
-            <h1>Balance en pesos:</h1>
-            <h2 id="balance">$2.000.000</h2>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-                <label class="form-check-label" for="flexSwitchCheckChecked">U$D</label>
+            <!-- TITLE AND SWITCH  -->
+            <div id="title">
+                <h1>Tu billetera</h1>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">U$D</label>
+                </div>
+            </div>
+
+            <!-- INFO -->
+            <div id="datas">
+                <div>
+                    <h2>Balance Total:</h2>
+                    <h3 id="balance"></h3>
+                </div>
+                <div>
+                    <h2>Deudas Pendientes:</h2>
+                    <h3>2.000.000 ARS</h3>
+                </div>
+                <div>
+                    <h2>Gastos de Marzo:</h2>
+                    <h3>2.000.000 ARS</h3>
+                </div>
+                <div>
+                    <h2>Cotiz. Dolar:</h2>
+                    <h3 id="dollar-info"></h3>
+                </div>
             </div>
         </header>
         <section id="main">
-            <section id="detail">
-                <div id="detail-top">
-                    <h2>Detalle:</h2>
-                    <div id="buttons">
-                        <button class="formButton" id="editButton" data-bs-toggle="modal" data-bs-target="#formModal">
+            <!-- BALANCES -->
+            <section id="balance-detail" class="info-cnt">
+                <div id="balance-top" class="info-top">
+                    <h2>Balances</h2>
+                    <div id="balance-buttons" class="info-buttons">
+                        <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#formModal">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
-                        <button class="formButton" id="deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
                         <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#formModal">
@@ -37,21 +58,54 @@
                         </button>
                     </div>
                 </div>
-                <div id="detail-bottom">
-                   <!-- ITEMS -->
-
+                <div id="balance-bottom" class="info-bottom">
+                    <!-- ITEMS -->
+                    <h2 class="advice">Acá podés agregar los balances de tus cuentas</h2>
                 </div>
             </section>
-            <section id="graphic">
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle" id="dropdownButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <b>Crecimiento general</b>
-                    </button>
-                    <ul class="dropdown-menu" id="dropdownMenu">
-                        <!-- ENTITYS -->
-                    </ul>
+
+            <!-- BILLS  -->
+            <section id="bills-detail"  class="info-cnt">
+                <div id="bills-top" class="info-top">
+                    <h2>Gastos</h2>
+                    <div id="bills-buttons" class="info-buttons">
+                        <button class="formButton" id="bills-editButton" data-bs-toggle="modal" data-bs-target="#">
+                            <img src="media/pen-to-square-regular.svg" alt="">
+                        </button>
+                        <button class="formButton" id="bills-deleteButton" data-bs-toggle="modal" data-bs-target="#">
+                            <img src="media/trash-can-regular.svg" alt="">
+                        </button>
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#">
+                            <img src="media/square-plus-regular.svg" alt="">
+                        </button>
+                    </div>
                 </div>
-                <canvas id="graphic-cnt"></canvas>
+                <div id="bills-bottom" class="info-bottom">
+                   <!-- ITEMS -->
+                   <h2 class="advice">Acá podés agregar tus gastos</h2>
+                </div>
+            </section>
+
+            <!-- DEBTS  -->
+            <section id="debts-detail"  class="info-cnt">
+                <div id="debts-top" class="info-top">
+                    <h2>Deudas</h2>
+                    <div id="debts-buttons" class="info-buttons">
+                        <button class="formButton" id="debts-editButton" data-bs-toggle="modal" data-bs-target="#">
+                            <img src="media/pen-to-square-regular.svg" alt="">
+                        </button>
+                        <button class="formButton" id="debts-deleteButton" data-bs-toggle="modal" data-bs-target="#">
+                            <img src="media/trash-can-regular.svg" alt="">
+                        </button>
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#">
+                            <img src="media/square-plus-regular.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div id="debts-bottom" class="info-bottom">
+                   <!-- ITEMS -->
+                   <h2 class="advice">Acá podés agregar tus deudas pendientes</h2>
+                </div>
             </section>
         </section>
         
