@@ -1,5 +1,5 @@
 const {BrowserWindow, screen, Notification, ipcMain} = require('electron')
-const { setMainMenu } = require('./ui/menu.js')
+const { setMainMenu } = require('./ui/js/menu.js')
 const { getConnection } = require('./database.js')
 
 ipcMain.on('createItem', async (event, item, table) => {

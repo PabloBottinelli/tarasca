@@ -23,19 +23,19 @@
 
             <!-- INFO -->
             <div id="datas">
-                <div>
+                <div style="flex: 2;">
                     <h2>Balance Total:</h2>
                     <h3 id="balance"></h3>
                 </div>
-                <div>
-                    <h2>Deudas Pendientes:</h2>
-                    <h3>2.000.000 ARS</h3>
-                </div>
-                <div>
+                <div style="flex: 2;">
                     <h2>Gastos de Marzo:</h2>
                     <h3>2.000.000 ARS</h3>
                 </div>
-                <div>
+                <div style="flex: 2;">
+                    <h2>Deudas Pendientes:</h2>
+                    <h3>2.000.000 ARS</h3>
+                </div>
+                <div style="flex: 1;">
                     <h2>Cotiz. Dolar:</h2>
                     <h3 id="dollar-info"></h3>
                 </div>
@@ -47,20 +47,20 @@
                 <div id="balance-top" class="info-top">
                     <h2>Balances</h2>
                     <div id="balance-buttons" class="info-buttons">
-                        <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#formModal">
+                        <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#balanceformModal">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
                         <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
-                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#formModal">
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceformModal">
                             <img src="media/square-plus-regular.svg" alt="">
                         </button>
                     </div>
                 </div>
                 <div id="balance-bottom" class="info-bottom">
                     <!-- ITEMS -->
-                    <h2 class="advice">Acá podés agregar los balances de tus cuentas</h2>
+                    <p class="advice">Acá podés agregar los balances de tus cuentas</p>
                 </div>
             </section>
 
@@ -82,7 +82,9 @@
                 </div>
                 <div id="bills-bottom" class="info-bottom">
                    <!-- ITEMS -->
-                   <h2 class="advice">Acá podés agregar tus gastos</h2>
+                   <p class="advice">Acá podés agregar tus gastos <br>
+                    Se descontaran de la cuenta que selecciones y al comenzar un nuevo mes se limpiara la lista <br>
+                    Si borras un gasto, se suma a la cuenta de la que se había restado </p>
                 </div>
             </section>
 
@@ -104,18 +106,18 @@
                 </div>
                 <div id="debts-bottom" class="info-bottom">
                    <!-- ITEMS -->
-                   <h2 class="advice">Acá podés agregar tus deudas pendientes</h2>
+                   <p class="advice">Acá podés agregar tus deudas pendientes</p>
                 </div>
             </section>
         </section>
         
-        <!-- Form Modal -->
-        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+        <!-- Balance Form Modal -->
+        <div class="modal fade" id="balanceformModal" tabindex="-1" aria-labelledby="balanceformModalLabel" aria-hidden="true">
             <div class="modal-dialog" id="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="formModalLabel">Nuevo Saldo</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h1 class="modal-title fs-5" id="balanceformModalLabel">Nuevo Saldo</h1>
+                        <button id="formCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="" id="newItemForm">
@@ -128,8 +130,8 @@
                                 <input type="text" class="form-control" aria-label="Text input with dropdown button" id="value">
                                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="selectedDropdownOption">ARS</button>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" id="dropdownARS">ARS</a></li>
-                                    <li><a class="dropdown-item" id="dropdownUSD">US$</a></li>
+                                    <li><a class="dropdown-item" id="balanceDropdownARS">ARS</a></li>
+                                    <li><a class="dropdown-item" id="balanceDropdownUSD">US$</a></li>
                                 </ul>
                             </div>
                             <div class="mb-3">
@@ -182,6 +184,7 @@
             </div>
         </div>
 
-        <script src="renderer.js"></script>
+        <script src="js/renderer.js"></script>
+        <!-- <script src="js/balances.js"></script> -->
     </body>
 </html>

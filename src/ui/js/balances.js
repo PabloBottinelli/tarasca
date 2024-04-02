@@ -1,54 +1,30 @@
 const { ipcRenderer } = require('electron')
 
-// FORM
 const newItemForm = document.getElementById('newItemForm')
-const modalDialog = document.getElementById('modal-dialog')
-const formModal = document.getElementById('formModal')
-
-// FORM INPUTS
 const itemEntity = document.getElementById('entity')
 const itemValue = document.getElementById('value')
 const itemColor = document.getElementById('color')
 const itemIconRadios = document.querySelectorAll('input[name="inlineRadioOptions"]')
 const selectedDropdownOption = document.getElementById('selectedDropdownOption')
-const dropdownARS = document.getElementById('dropdownARS')
-const dropdownUSD = document.getElementById('dropdownUSD')
-let itemIcon
-
-// ITEM LIST
+const dropdownARS = document.getElementById('balanceDropdownARS')
+const dropdownUSD = document.getElementById('balanceDropdownUSD')
 const itemList = document.getElementById('balance-bottom')
+let itemIcon
+// FORM
+const modalDialog = document.getElementById('modal-dialog')
+const formModal = document.getElementById('balanceformModal')
 
 // BUTTONS
 const editButton = document.getElementById('balance-editButton')
 const deleteButton = document.getElementById('balance-deleteButton')
 const confirmDeleteButton = document.getElementById('confirmDeleteButton')
 const formCloseButton = document.getElementById('formCloseButton')
-const switchButton = document.getElementById('flexSwitchCheckChecked')
+const formCloseButton2 = document.getElementById('formCloseButton2')
 
-// STATUS VARIABLES
 let selectedItem = null
 let editingStatus = false
-let usdCurrency = false
 
-// TOTAL BALANCE
-const balance = document.getElementById('balance')
-
-// DOLLAR 
-let usdPrice_sell = 0
-let usdPrice_buy = 0
-const dollarInfo = document.getElementById('dollar-info')
-fetch('https://api.bluelytics.com.ar/v2/latest')
-.then(response => response.json())
-.then(data => {
-    usdPrice_sell = data.blue.value_sell
-    usdPrice_buy = data.blue.value_buy
-    dollarInfo.textContent = "V: " + usdPrice_sell + " " + "C: " + usdPrice_buy
-})
-.catch(error => {
-    console.error('Error al obtener los datos:', error)
-})
-
-// CREATE AND EDIT FUNCTIONS
+// Create
 itemIconRadios.forEach((radio) => {
     radio.addEventListener('change', (e) => {
         itemIcon = e.target.value
@@ -89,7 +65,7 @@ newItemForm.addEventListener('submit', (e) => {
     getItems()
 })
 
-// RENDER
+// Render
 function renderItems(items) {
     itemList.innerHTML = ""
     let bal = 0
@@ -105,11 +81,12 @@ function renderItems(items) {
         
         bal += value
         let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-        
         itemList.innerHTML += `
             <div id="${i.id}" class="item animate__animated animate__bounceInLeft">
                 <div class="item-detail">
-                    <img src="media/${i.icon}" alt="Icon" style="background-color: ${hexToRGBA(i.color, 0.9)};">
+                    <div class="icon-cnt" style="background-color: ${i.color};">
+                        <img src="media/${i.icon}" alt="Icon">
+                    </div>
                     <h3>${i.entity}</h3>
                 </div>
                 <div class="item-data-cnt">
@@ -119,22 +96,16 @@ function renderItems(items) {
         `
     })
 
-    bal = usdCurrency ? bal/usdPrice_sell : bal
-    let formattedBalance = usdCurrency ? bal.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : bal.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-    balance.textContent = formattedBalance
-
     const itemElements = document.querySelectorAll('.item')
     itemElements.forEach((itemElement) => {
         itemElement.addEventListener('mouseover', function() {
             if(selectedItem != itemElement){
-                const computedStyle = window.getComputedStyle(itemElement)
                 itemElement.style.border = '2px solid #272727'
             }
         })
     
         itemElement.addEventListener('mouseout', function() {
             if(selectedItem != itemElement){
-                const computedStyle = window.getComputedStyle(itemElement)
                 itemElement.style.border = '2px solid rgb(161, 161, 161)'
             }
         })
@@ -151,56 +122,25 @@ function renderItems(items) {
             }
         })
     })
+
+    return bal
 }
 
-function hexToRGBA(hex, alpha) {
-    // Elimino el símbolo '#' si está presente
-    hex = hex.replace('#', '')
-
-    // Convierto el valor hexadecimal a valores numéricos RGB
-    const r = parseInt(hex.substring(0, 2), 16)
-    const g = parseInt(hex.substring(2, 4), 16)
-    const b = parseInt(hex.substring(4, 6), 16)
-
-    // Creo la cadena RGBA utilizando los valores RGB y el valor alfa
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`
-}
-
-document.addEventListener('click', function(event) {
-    if(selectedItem && !selectedItem.contains(event.target) && !editingStatus){
-        selectedItem.style.border = '2px solid rgb(161, 161, 161)'
-        editButton.style.display = 'none'
-        deleteButton.style.display = 'none'
-        selectedItem = null
-    }
-    if(editingStatus && (event.target == formCloseButton || (event.target != modalDialog && event.target == formModal))){
-        editingStatus = false
-        selectedItem.style.border = '2px solid rgb(161, 161, 161)'
-        editButton.style.display = 'none'
-        deleteButton.style.display = 'none'
-        selectedItem = null
-        newItemForm.reset()
-    }
-})
-
-switchButton.addEventListener('click', function(){
-    usdCurrency = !usdCurrency
-    getItems()
-})
-
-// GET
+// Get
 function getItems(){
     items = ipcRenderer.sendSync('getItems', "balances")
-    renderItems(items)
+    let totalBalance
+    totalBalance = renderItems(items)
+    return totalBalance
 }
 
-// DELETE 
+// Delete
 deleteButton.addEventListener('click', function(event){
     event.stopPropagation()
 })
 
-confirmDeleteButton.addEventListener('click', function(event){
-    deleteItem(selectedItem.id)
+confirmDeleteButton.addEventListener('click', function(){
+    balances.deleteItem(selectedItem.id)
 })
 
 function deleteItem(id){
@@ -208,10 +148,10 @@ function deleteItem(id){
     getItems()
 }
 
-// EDIT 
+// Edit
 editButton.addEventListener('click', function(event) {
     event.stopPropagation()
-    editItem(selectedItem.id)
+    balances.editItem(selectedItem.id)
 })
 
 function editItem(id){
@@ -229,8 +169,26 @@ function editItem(id){
     editingStatus = true
 }
 
-function init(){
-    getItems()
-}
+// Styles
+document.addEventListener('click', function(event) {
+    if(selectedItem && !selectedItem.contains(event.target) && !editingStatus){
+        selectedItem.style.border = '2px solid rgb(161, 161, 161)'
+        editButton.style.display = 'none'
+        deleteButton.style.display = 'none'
+        selectedItem = null
+    }
+    if(editingStatus && (event.target == formCloseButton || event.target == formCloseButton2 || (event.target != modalDialog && event.target == formModal))){
+        editingStatus = false
+        selectedItem.style.border = '2px solid rgb(161, 161, 161)'
+        editButton.style.display = 'none'
+        deleteButton.style.display = 'none'
+        selectedItem = null
+        newItemForm.reset()
+    }
+})
 
-init()
+module.exports = {
+    getItems,
+    deleteItem,
+    editItem
+}
