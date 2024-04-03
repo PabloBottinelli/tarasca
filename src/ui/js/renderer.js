@@ -26,27 +26,45 @@ const switchButton = document.getElementById('flexSwitchCheckChecked')
 
 switchButton.addEventListener('click', function(){
     usdCurrency = !usdCurrency
-    let totalBalance
-    totalBalance = balances.getItems()
-    renderBalance(totalBalance)
+    let totals
+    totals = getAll()
+    renderTotals(totals)
 })
 
 // Render Balance
 const balance = document.getElementById('balance')
 
-function renderBalance(bal){
-    let formattedBalance = usdCurrency ? bal.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : bal.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+function renderTotals(totals){
+    let formattedBalance = usdCurrency ? totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
     balance.textContent = formattedBalance
+}
+
+// Get All
+function getAll(){
+    totalBalance = balances.getItems()
+    totalBills = bills.getItems()
+
+    renderTotals({totalBalance, totalBills})
+}
+
+// Item Border Visuals
+let selectedItem = null
+function borderVisuals(items){
+    items.forEach((itemElement) => {
+        itemElement.addEventListener('click', function(){
+            selectedItem = itemElement
+        })
+    })
 }
 
 // Init
 async function init(){
     await fetchDollarPrice()
-    let totalBalance
-    totalBalance = balances.getItems()
     
+    getAll()
     
-    renderBalance(totalBalance)
+    const itemElements = document.querySelectorAll('.item')
+    borderVisuals(itemElements)
 }
 
 init()

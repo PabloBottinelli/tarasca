@@ -170,6 +170,14 @@ body {
     border: 2px solid rgb(161, 161, 161);
 }
 
+.item:hover{
+    border: 2px solid #272727;
+}
+
+.item:focus{
+    border: 2px solid red;
+}
+
 .item-detail{
     height: 100%;
     display: flex;

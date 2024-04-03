@@ -47,13 +47,13 @@
                 <div id="balance-top" class="info-top">
                     <h2>Balances</h2>
                     <div id="balance-buttons" class="info-buttons">
-                        <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#balanceformModal">
+                        <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
                         <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
-                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceformModal">
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
                             <img src="media/square-plus-regular.svg" alt="">
                         </button>
                     </div>
@@ -69,13 +69,13 @@
                 <div id="bills-top" class="info-top">
                     <h2>Gastos</h2>
                     <div id="bills-buttons" class="info-buttons">
-                        <button class="formButton" id="bills-editButton" data-bs-toggle="modal" data-bs-target="#">
+                        <button class="formButton" id="bills-editButton" data-bs-toggle="modal" data-bs-target="#billsFormModal">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
                         <button class="formButton" id="bills-deleteButton" data-bs-toggle="modal" data-bs-target="#">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
-                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#">
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#billsFormModal">
                             <img src="media/square-plus-regular.svg" alt="">
                         </button>
                     </div>
@@ -112,23 +112,23 @@
         </section>
         
         <!-- Balance Form Modal -->
-        <div class="modal fade" id="balanceformModal" tabindex="-1" aria-labelledby="balanceformModalLabel" aria-hidden="true">
-            <div class="modal-dialog" id="modal-dialog">
+        <div class="modal fade" id="balanceFormModal" tabindex="-1" aria-labelledby="balanceFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="balance-modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="balanceformModalLabel">Nuevo Saldo</h1>
-                        <button id="formCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h1 class="modal-title fs-5" id="balanceFormModalLabel">Nuevo Saldo</h1>
+                        <button id="balanceFormCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="" id="newItemForm">
+                        <form action="" id="balanceNewItemForm">
                             <div class="mb-3">
-                                <label for="entity" class="form-label">Entidad</label>
-                                <input type="text" class="form-control" id="entity">
+                                <label for="balanceEntity" class="form-label">Entidad</label>
+                                <input type="text" class="form-control" id="balanceEntity">
                             </div>
                             <div class="input-group mb-3">
-                                <label for="value" class="form-label">Valor</label>
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="value">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="selectedDropdownOption">ARS</button>
+                                <label for="balanceValue" class="form-label">Valor</label>
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="balanceValue">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="balanceSelectedDropdownOption">ARS</button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" id="balanceDropdownARS">ARS</a></li>
                                     <li><a class="dropdown-item" id="balanceDropdownUSD">US$</a></li>
@@ -138,28 +138,89 @@
                                 <label for="icon" class="form-label">Icono</label>
                                 <div class="radio-cnt">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="bitcoin" value="bitcoin-sign-solid.svg">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="bitcoin-sign-solid.svg">
                                         <label class="form-check-label" for="bitcoin"><img src="media/bitcoin-sign-solid.svg" alt=""></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="columns" value="building-columns-solid.svg">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="building-columns-solid.svg">
                                         <label class="form-check-label" for="columns"><img src="media/building-columns-solid.svg" alt=""></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="chart" value="chart-simple-solid.svg">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="chart-simple-solid.svg">
                                         <label class="form-check-label" for="chart"><img src="media/chart-simple-solid.svg" alt=""></label>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <label for="color" class="form-label">Color</label>
-                                <input type="color" class="form-control form-control-color" id="color" value="#563d7c" title="Color">       
+                                <label for="balanceColor" class="form-label">Color</label>
+                                <input type="color" class="form-control form-control-color" id="balanceColor" value="#563d7c" title="Color">       
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="formCloseButton">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" form="newItemForm" data-bs-dismiss="modal">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="balanceFormCloseButton">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" form="balanceNewItemForm" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bills Form Modal -->
+        <div class="modal fade" id="billsFormModal" tabindex="-1" aria-labelledby="billsFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="bills-modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="billsFormModalLabel">Nuevo Gasto</h1>
+                        <button id="billsFormCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="billsNewItemForm">
+                            <label for="billsDropdownEntitys" class="form-label">Entidad</label>
+                            <select class="form-select mb-3" id="billsDropdownEntitys">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <div class="input-group mb-3">
+                                <label for="billsValue" class="form-label">Valor</label>
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="billsValue">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="billsSelectedDropdownOption">ARS</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" id="billsDropdownARS">ARS</a></li>
+                                    <li><a class="dropdown-item" id="billsDropdownUSD">US$</a></li>
+                                </ul>
+                            </div>
+                            <div class="mb-3">
+                                <label for="icon" class="form-label">Icono</label>
+                                <div class="radio-cnt">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="bitcoin-sign-solid.svg">
+                                        <label class="form-check-label" for="bitcoin"><img src="media/bitcoin-sign-solid.svg" alt=""></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="building-columns-solid.svg">
+                                        <label class="form-check-label" for="columns"><img src="media/building-columns-solid.svg" alt=""></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <label class="form-check-label" for="chart"><img src="media/chart-simple-solid.svg" alt=""></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="billsColor" class="form-label">Color</label>
+                                <input type="color" class="form-control form-control-color" id="billsColor" value="#563d7c" title="Color">       
+                            </div>
+                            <div class="mb-3">
+                                <label for="billsDate" class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="billsDate">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="billsFormCloseButton">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" form="billsNewItemForm" data-bs-dismiss="modal">Guardar</button>
                     </div>
                 </div>
             </div>

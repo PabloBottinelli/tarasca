@@ -1,27 +1,32 @@
 const { ipcRenderer } = require('electron')
 
-const newItemForm = document.getElementById('newItemForm')
-const itemEntity = document.getElementById('entity')
-const itemValue = document.getElementById('value')
-const itemColor = document.getElementById('color')
-const itemIconRadios = document.querySelectorAll('input[name="inlineRadioOptions"]')
-const selectedDropdownOption = document.getElementById('selectedDropdownOption')
+// Items
+const itemList = document.getElementById('balance-bottom')
+
+// Form
+const formModal = document.getElementById('balanceFormModal')
+const modalDialog = document.getElementById('balance-modal-dialog')
+const newItemForm = document.getElementById('balanceNewItemForm')
+const itemEntity = document.getElementById('balanceEntity')
+const itemValue = document.getElementById('balanceValue')
+const itemColor = document.getElementById('balanceColor')
+const itemIconRadios = document.querySelectorAll('input[name="balanceInlineRadioOptions"]')
+const selectedDropdownOption = document.getElementById('balanceSelectedDropdownOption')
 const dropdownARS = document.getElementById('balanceDropdownARS')
 const dropdownUSD = document.getElementById('balanceDropdownUSD')
-const itemList = document.getElementById('balance-bottom')
 let itemIcon
-// FORM
-const modalDialog = document.getElementById('modal-dialog')
-const formModal = document.getElementById('balanceformModal')
 
-// BUTTONS
+// Bills Form
+const billsDropdownEntitys = document.getElementById('billsDropdownEntitys')
+
+// Buttons
 const editButton = document.getElementById('balance-editButton')
 const deleteButton = document.getElementById('balance-deleteButton')
 const confirmDeleteButton = document.getElementById('confirmDeleteButton')
-const formCloseButton = document.getElementById('formCloseButton')
-const formCloseButton2 = document.getElementById('formCloseButton2')
+const formCloseButton = document.getElementById('balanceFormCloseButton')
+const formCloseButton2 = document.getElementById('balanceFormCloseButton2')
 
-let selectedItem = null
+// Status 
 let editingStatus = false
 
 // Create
@@ -62,14 +67,16 @@ newItemForm.addEventListener('submit', (e) => {
     }
 
     newItemForm.reset()
-    getItems()
+    getAll()
 })
 
 // Render
 function renderItems(items) {
     itemList.innerHTML = ""
+    billsDropdownEntitys.innerHTML = ""
     let bal = 0
-    let value;
+    let value
+
     items.forEach((i) => {
         if((i.currency == "US$" && usdCurrency) || (i.currency == "ARS" && !usdCurrency)){
             value = i.value
@@ -81,8 +88,9 @@ function renderItems(items) {
         
         bal += value
         let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+        
         itemList.innerHTML += `
-            <div id="${i.id}" class="item animate__animated animate__bounceInLeft">
+            <div id="balance-${i.id}" class="item balanceItem animate__animated animate__bounceInLeft" tabindex="0">
                 <div class="item-detail">
                     <div class="icon-cnt" style="background-color: ${i.color};">
                         <img src="media/${i.icon}" alt="Icon">
@@ -94,31 +102,18 @@ function renderItems(items) {
                 </div>
             </div>
         `
+
+        billsDropdownEntitys.innerHTML += `
+            <option value="${i.id}">${i.entity}</option>
+        `
     })
-
-    const itemElements = document.querySelectorAll('.item')
-    itemElements.forEach((itemElement) => {
-        itemElement.addEventListener('mouseover', function() {
-            if(selectedItem != itemElement){
-                itemElement.style.border = '2px solid #272727'
-            }
-        })
     
-        itemElement.addEventListener('mouseout', function() {
-            if(selectedItem != itemElement){
-                itemElement.style.border = '2px solid rgb(161, 161, 161)'
-            }
-        })
-
-        itemElement.addEventListener('click', function(){
-            if(selectedItem != itemElement){
-                if(selectedItem){
-                    selectedItem.style.border = '2px solid  rgb(161, 161, 161)'
-                }
-                itemElement.style.border = '2px solid red'
+    const balanceItems = document.querySelectorAll('.balanceItem')
+    balanceItems.forEach((i) => {
+        i.addEventListener('click', function(){
+            if(selectedItem != i){
                 editButton.style.display = 'inline-block'
                 deleteButton.style.display = 'inline-block'
-                selectedItem = itemElement
             }
         })
     })
@@ -140,18 +135,23 @@ deleteButton.addEventListener('click', function(event){
 })
 
 confirmDeleteButton.addEventListener('click', function(){
-    balances.deleteItem(selectedItem.id)
+    console.log(selectedItem)
+    let splittedId = selectedItem.id.split("-")
+    let number = splittedId[1]
+    deleteItem(number)
 })
 
 function deleteItem(id){
     ipcRenderer.sendSync('deleteItem', id, "balances")
-    getItems()
+    getAll()
 }
 
 // Edit
 editButton.addEventListener('click', function(event) {
     event.stopPropagation()
-    balances.editItem(selectedItem.id)
+    let splittedId = selectedItem.id.split("-")
+    let number = splittedId[1]
+    editItem(number)
 })
 
 function editItem(id){
@@ -169,19 +169,15 @@ function editItem(id){
     editingStatus = true
 }
 
-// Styles
-document.addEventListener('click', function(event) {
-    if(selectedItem && !selectedItem.contains(event.target) && !editingStatus){
-        selectedItem.style.border = '2px solid rgb(161, 161, 161)'
+// Style States
+document.addEventListener('click', function(event){
+    if((selectedItem && !(selectedItem.contains(event.target)) && !editingStatus) || (selectedItem && selectedItem.classList[1] != "balanceItem")){
         editButton.style.display = 'none'
         deleteButton.style.display = 'none'
         selectedItem = null
     }
     if(editingStatus && (event.target == formCloseButton || event.target == formCloseButton2 || (event.target != modalDialog && event.target == formModal))){
         editingStatus = false
-        selectedItem.style.border = '2px solid rgb(161, 161, 161)'
-        editButton.style.display = 'none'
-        deleteButton.style.display = 'none'
         selectedItem = null
         newItemForm.reset()
     }
