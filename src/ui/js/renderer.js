@@ -17,7 +17,7 @@ async function fetchDollarPrice() {
         usdPrice_buy = data.blue.value_buy
         dollarInfo.textContent = "V: " + usdPrice_sell + " " + "C: " + usdPrice_buy
     } catch (error) {
-        console.error('Error al obtener los datos:', error);
+        console.error('Error al obtener los datos:', error)
     }
 }
 
@@ -35,36 +35,23 @@ switchButton.addEventListener('click', function(){
 const balance = document.getElementById('balance')
 
 function renderTotals(totals){
-    let formattedBalance = usdCurrency ? totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-    balance.textContent = formattedBalance
+    if(totals){
+        let formattedBalance = usdCurrency ? totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+        balance.textContent = formattedBalance
+    }
 }
 
 // Get All
 function getAll(){
-    totalBalance = balances.getItems()
-    totalBills = bills.getItems()
-
+    let totalBalance = balances.getItems()
+    let totalBills = bills.getItems()
     renderTotals({totalBalance, totalBills})
-}
-
-// Item Border Visuals
-let selectedItem = null
-function borderVisuals(items){
-    items.forEach((itemElement) => {
-        itemElement.addEventListener('click', function(){
-            selectedItem = itemElement
-        })
-    })
 }
 
 // Init
 async function init(){
-    await fetchDollarPrice()
-    
+    await fetchDollarPrice()  
     getAll()
-    
-    const itemElements = document.querySelectorAll('.item')
-    borderVisuals(itemElements)
 }
 
 init()

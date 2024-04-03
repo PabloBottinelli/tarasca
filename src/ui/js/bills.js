@@ -47,12 +47,12 @@ newItemForm.addEventListener('submit', (e) => {
     }
 
     if(editingStatus){
-        ipcRenderer.sendSync('editItem', selectedItem.id, item, "bills")
-        editingStatus = false
-        selectedItem.style.border = '2px solid transparent'
-        editButton.style.display = 'none'
-        deleteButton.style.display = 'none'
-        selectedItem = null
+        // ipcRenderer.sendSync('editItem', selectedItem.id, item, "bills")
+        // editingStatus = false
+        // selectedItem.style.border = '2px solid transparent'
+        // editButton.style.display = 'none'
+        // deleteButton.style.display = 'none'
+        // selectedItem = null
     }else{
         ipcRenderer.sendSync('createItem', item, "bills")
     }

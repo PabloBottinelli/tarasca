@@ -4,9 +4,11 @@ const { ipcRenderer } = require('electron')
 const itemList = document.getElementById('balance-bottom')
 
 // Form
-const formModal = document.getElementById('balanceFormModal')
-const modalDialog = document.getElementById('balance-modal-dialog')
 const newItemForm = document.getElementById('balanceNewItemForm')
+
+// Form Inputs
+const formModal = new bootstrap.Modal(document.getElementById('balanceFormModal'))
+const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'))
 const itemEntity = document.getElementById('balanceEntity')
 const itemValue = document.getElementById('balanceValue')
 const itemColor = document.getElementById('balanceColor')
@@ -23,11 +25,10 @@ const billsDropdownEntitys = document.getElementById('billsDropdownEntitys')
 const editButton = document.getElementById('balance-editButton')
 const deleteButton = document.getElementById('balance-deleteButton')
 const confirmDeleteButton = document.getElementById('confirmDeleteButton')
-const formCloseButton = document.getElementById('balanceFormCloseButton')
-const formCloseButton2 = document.getElementById('balanceFormCloseButton2')
 
 // Status 
 let editingStatus = false
+let selectedItem
 
 // Create
 itemIconRadios.forEach((radio) => {
@@ -56,12 +57,7 @@ newItemForm.addEventListener('submit', (e) => {
     }
 
     if(editingStatus){
-        ipcRenderer.sendSync('editItem', selectedItem.id, item, "balances")
-        editingStatus = false
-        selectedItem.style.border = '2px solid transparent'
-        editButton.style.display = 'none'
-        deleteButton.style.display = 'none'
-        selectedItem = null
+        // ipcRenderer.sendSync('editItem', selectedItem.id, item, "balances")
     }else{
         ipcRenderer.sendSync('createItem', item, "balances")
     }
@@ -110,10 +106,21 @@ function renderItems(items) {
     
     const balanceItems = document.querySelectorAll('.balanceItem')
     balanceItems.forEach((i) => {
-        i.addEventListener('click', function(){
-            if(selectedItem != i){
-                editButton.style.display = 'inline-block'
-                deleteButton.style.display = 'inline-block'
+        i.addEventListener('focus', function(event){
+            editButton.style.display = 'inline-block'
+            deleteButton.style.display = 'inline-block'
+            let splittedId = event.target.id.split("-")
+            let id = splittedId[1]
+            selectedItem = id
+            console.log("Focus item: ", id)
+        })
+
+        i.addEventListener('blur', function(event){
+            if (event.relatedTarget !== editButton && event.relatedTarget !== deleteButton) {
+                editButton.style.display = 'none'
+                deleteButton.style.display = 'none'
+                selectedItem = null
+                console.log("Blur item: ", selectedItem)
             }
         })
     })
@@ -130,15 +137,22 @@ function getItems(){
 }
 
 // Delete
-deleteButton.addEventListener('click', function(event){
-    event.stopPropagation()
+deleteModal._element.addEventListener('hidden.bs.modal', function () {
+    selectedItem = null
+    console.log("se cerro el delete modal ", selectedItem)
+})
+
+deleteButton.addEventListener('click', function(){
+    editButton.style.display = 'none'
+    deleteButton.style.display = 'none'
 })
 
 confirmDeleteButton.addEventListener('click', function(){
-    console.log(selectedItem)
-    let splittedId = selectedItem.id.split("-")
-    let number = splittedId[1]
-    deleteItem(number)
+    
+    // let splittedId = selectedItem.id.split("-")
+    // let number = splittedId[1]
+    // deleteItem(number)
+
 })
 
 function deleteItem(id){
@@ -148,10 +162,18 @@ function deleteItem(id){
 
 // Edit
 editButton.addEventListener('click', function(event) {
-    event.stopPropagation()
-    let splittedId = selectedItem.id.split("-")
-    let number = splittedId[1]
-    editItem(number)
+    editButton.style.display = 'none'
+    deleteButton.style.display = 'none'
+    editingStatus = true
+    // let splittedId = selectedItem.id.split("-")
+    // let number = splittedId[1]
+    // editItem(number)
+})
+
+formModal._element.addEventListener('hidden.bs.modal', function () {
+    selectedItem = null
+    editingStatus = false
+    console.log("se cerro el form modal ", selectedItem)
 })
 
 function editItem(id){
@@ -166,22 +188,7 @@ function editItem(id){
             radio.checked = true
         }
     })
-    editingStatus = true
 }
-
-// Style States
-document.addEventListener('click', function(event){
-    if((selectedItem && !(selectedItem.contains(event.target)) && !editingStatus) || (selectedItem && selectedItem.classList[1] != "balanceItem")){
-        editButton.style.display = 'none'
-        deleteButton.style.display = 'none'
-        selectedItem = null
-    }
-    if(editingStatus && (event.target == formCloseButton || event.target == formCloseButton2 || (event.target != modalDialog && event.target == formModal))){
-        editingStatus = false
-        selectedItem = null
-        newItemForm.reset()
-    }
-})
 
 module.exports = {
     getItems,
