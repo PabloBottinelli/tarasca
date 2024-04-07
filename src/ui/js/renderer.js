@@ -36,7 +36,8 @@ const balance = document.getElementById('balance')
 
 function renderTotals(totals){
     if(totals){
-        let formattedBalance = usdCurrency ? totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totals.totalBalance.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+        let total = totals.totalBalance + totals.totalBills
+        let formattedBalance = usdCurrency ? total.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : total.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
         balance.textContent = formattedBalance
     }
 }

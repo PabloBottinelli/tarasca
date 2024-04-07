@@ -50,7 +50,7 @@
                         <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
-                        <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#balancesDeleteModal">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
                         <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
@@ -67,12 +67,12 @@
             <!-- BILLS  -->
             <section id="bills-detail"  class="info-cnt">
                 <div id="bills-top" class="info-top">
-                    <h2>Gastos</h2>
+                    <h2>Gastos/Ingresos</h2>
                     <div id="bills-buttons" class="info-buttons">
                         <button class="formButton" id="bills-editButton" data-bs-toggle="modal" data-bs-target="#billsFormModal">
                             <img src="media/pen-to-square-regular.svg" alt="">
                         </button>
-                        <button class="formButton" id="bills-deleteButton" data-bs-toggle="modal" data-bs-target="#">
+                        <button class="formButton" id="bills-deleteButton" data-bs-toggle="modal" data-bs-target="#billsDeleteModal">
                             <img src="media/trash-can-regular.svg" alt="">
                         </button>
                         <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#billsFormModal">
@@ -177,7 +177,7 @@
                         <form action="" id="billsNewItemForm">
                             <label for="billsDropdownEntitys" class="form-label">Entidad</label>
                             <select class="form-select mb-3" id="billsDropdownEntitys">
-                                <option selected>Open this select menu</option>
+                                <option>Open this select menu</option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
                                 <option value="3">Three</option>
@@ -190,6 +190,21 @@
                                     <li><a class="dropdown-item" id="billsDropdownARS">ARS</a></li>
                                     <li><a class="dropdown-item" id="billsDropdownUSD">US$</a></li>
                                 </ul>
+                            </div>
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Tipo</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="billsTypeOptions" value="expense">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Gasto
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="billsTypeOptions" value="income">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Ingreso
+                                    </label>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="icon" class="form-label">Icono</label>
@@ -213,6 +228,10 @@
                                 <input type="color" class="form-control form-control-color" id="billsColor" value="#563d7c" title="Color">       
                             </div>
                             <div class="mb-3">
+                                <label for="billsDescription" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="billsDescription">
+                            </div>
+                            <div class="mb-3">
                                 <label for="billsDate" class="form-label">Fecha</label>
                                 <input type="date" class="form-control" id="billsDate">
                             </div>
@@ -226,8 +245,8 @@
             </div>
         </div>
 
-        <!-- Delete Modal -->
-        <div class="modal" tabindex="-1" id="deleteModal">
+        <!-- Balance Delete Modal -->
+        <div class="modal" tabindex="-1" id="balancesDeleteModal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -238,8 +257,27 @@
                         <p>¿Seguro que deseas eliminar este item?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="balanceDeleteCancelButton">Cancelar</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirmDeleteButton">Aceptar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="balanceConfirmDeleteButton">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill Delete Modal -->
+        <div class="modal" tabindex="-1" id="billsDeleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Seguro que deseas eliminar este item?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="billConfirmDeleteButton">Aceptar</button>
                     </div>
                 </div>
             </div>

@@ -68,7 +68,7 @@ ipcMain.on('deleteItem', async(event, id, table) => {
       title: 'Completado',
       body: 'El item se eliminó correctamente'
     }).show()
-
+    
     event.returnValue = result
   }catch(error){
     new Notification({

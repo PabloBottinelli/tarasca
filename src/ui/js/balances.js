@@ -6,9 +6,11 @@ const itemList = document.getElementById('balance-bottom')
 // Form
 const newItemForm = document.getElementById('balanceNewItemForm')
 
-// Form Inputs
+// Modals
 const formModal = new bootstrap.Modal(document.getElementById('balanceFormModal'))
-const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'))
+const deleteModal = new bootstrap.Modal(document.getElementById('balancesDeleteModal'))
+
+// Form Inputs
 const itemEntity = document.getElementById('balanceEntity')
 const itemValue = document.getElementById('balanceValue')
 const itemColor = document.getElementById('balanceColor')
@@ -24,7 +26,7 @@ const billsDropdownEntitys = document.getElementById('billsDropdownEntitys')
 // Buttons
 const editButton = document.getElementById('balance-editButton')
 const deleteButton = document.getElementById('balance-deleteButton')
-const confirmDeleteButton = document.getElementById('confirmDeleteButton')
+const confirmDeleteButton = document.getElementById('balanceConfirmDeleteButton')
 
 // Status 
 let editingStatus = false
@@ -57,7 +59,7 @@ newItemForm.addEventListener('submit', (e) => {
     }
 
     if(editingStatus){
-        // ipcRenderer.sendSync('editItem', selectedItem.id, item, "balances")
+        ipcRenderer.sendSync('editItem', selectedItem, item, "balances")
     }else{
         ipcRenderer.sendSync('createItem', item, "balances")
     }
@@ -112,7 +114,6 @@ function renderItems(items) {
             let splittedId = event.target.id.split("-")
             let id = splittedId[1]
             selectedItem = id
-            console.log("Focus item: ", id)
         })
 
         i.addEventListener('blur', function(event){
@@ -120,7 +121,6 @@ function renderItems(items) {
                 editButton.style.display = 'none'
                 deleteButton.style.display = 'none'
                 selectedItem = null
-                console.log("Blur item: ", selectedItem)
             }
         })
     })
@@ -138,8 +138,10 @@ function getItems(){
 
 // Delete
 deleteModal._element.addEventListener('hidden.bs.modal', function () {
-    selectedItem = null
-    console.log("se cerro el delete modal ", selectedItem)
+    // This timeout is to avoid conflicts when sending the id to the database
+    setTimeout(function(){ 
+        selectedItem = null
+    }, 1000)
 })
 
 deleteButton.addEventListener('click', function(){
@@ -148,48 +150,43 @@ deleteButton.addEventListener('click', function(){
 })
 
 confirmDeleteButton.addEventListener('click', function(){
-    
-    // let splittedId = selectedItem.id.split("-")
-    // let number = splittedId[1]
-    // deleteItem(number)
-
+    deleteItem()
 })
 
-function deleteItem(id){
-    ipcRenderer.sendSync('deleteItem', id, "balances")
+function deleteItem(){
+    ipcRenderer.sendSync('deleteItem', selectedItem, "balances")
     getAll()
 }
 
 // Edit
-editButton.addEventListener('click', function(event) {
+editButton.addEventListener('click', function() {
     editButton.style.display = 'none'
     deleteButton.style.display = 'none'
     editingStatus = true
-    // let splittedId = selectedItem.id.split("-")
-    // let number = splittedId[1]
-    // editItem(number)
+    editItem()
 })
 
 formModal._element.addEventListener('hidden.bs.modal', function () {
     selectedItem = null
     editingStatus = false
-    console.log("se cerro el form modal ", selectedItem)
+    newItemForm.reset()
 })
 
-function editItem(id){
-    const item = ipcRenderer.sendSync('getItemById', id, "balances")
+function editItem(){
+    const item = ipcRenderer.sendSync('getItemById', selectedItem, "balances")
     itemEntity.value = item.entity
     itemValue.value = item.value
     itemColor.value = item.color
-    itemIcon = item.icon
     selectedDropdownOption.textContent = item.currency
     itemIconRadios.forEach(function(radio){
         if(radio.value == item.icon){
             radio.checked = true
+            radio.dispatchEvent(new Event('change'))
         }
     })
 }
 
+// Exports
 module.exports = {
     getItems,
     deleteItem,
