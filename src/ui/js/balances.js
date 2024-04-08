@@ -69,7 +69,7 @@ newItemForm.addEventListener('submit', (e) => {
 })
 
 // Render
-function renderItems(items) {
+function renderItems(items, billsByEntity){
     itemList.innerHTML = ""
     billsDropdownEntitys.innerHTML = ""
     let bal = 0
@@ -84,7 +84,16 @@ function renderItems(items) {
             value = i.value*usdPrice_buy
         }
         
+        // Calculations
         bal += value
+
+        let entitySearch = i.entity
+        let foundObject = billsByEntity.find(obj => obj.entity === entitySearch)
+        if(foundObject){
+            value += foundObject.total
+            bal += foundObject.total
+        }
+
         let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
         
         itemList.innerHTML += `
@@ -129,10 +138,9 @@ function renderItems(items) {
 }
 
 // Get
-function getItems(){
+function getItems(billsByEntity){
     items = ipcRenderer.sendSync('getItems', "balances")
-    let totalBalance
-    totalBalance = renderItems(items)
+    let totalBalance = renderItems(items, billsByEntity)
     return totalBalance
 }
 

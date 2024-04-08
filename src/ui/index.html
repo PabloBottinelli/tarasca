@@ -23,21 +23,26 @@
 
             <!-- INFO -->
             <div id="datas">
-                <div style="flex: 2;">
+                <div style="flex: 3;">
                     <h2>Balance Total:</h2>
                     <h3 id="balance"></h3>
                 </div>
-                <div style="flex: 2;">
+                <div style="flex: 3;">
                     <h2>Gastos de Marzo:</h2>
-                    <h3>2.000.000 ARS</h3>
+                    <h3 id="bills"></h3>
                 </div>
-                <div style="flex: 2;">
+                <div style="flex: 3;">
+                    <h2>Ingresos de Marzo:</h2>
+                    <h3 id="bills"></h3>
+                </div>
+                <div style="flex: 3;">
                     <h2>Deudas Pendientes:</h2>
-                    <h3>2.000.000 ARS</h3>
+                    <h3 id="debts"></h3>
                 </div>
-                <div style="flex: 1;">
-                    <h2>Cotiz. Dolar:</h2>
-                    <h3 id="dollar-info"></h3>
+                <div style="flex: 1; text-align: center;">
+                    <h2>Dolar:</h2>
+                    <h3 id="dollar-sell" style="font-size: 1.2rem;"></h3>
+                    <h3 id="dollar-buy" style="font-size: 1.2rem;"></h3>
                 </div>
             </div>
         </header>
@@ -82,9 +87,8 @@
                 </div>
                 <div id="bills-bottom" class="info-bottom">
                    <!-- ITEMS -->
-                   <p class="advice">Acá podés agregar tus gastos <br>
-                    Se descontaran de la cuenta que selecciones y al comenzar un nuevo mes se limpiara la lista <br>
-                    Si borras un gasto, se suma a la cuenta de la que se había restado </p>
+                   <p class="advice">Acá podés agregar tus gastos o ingresos <br>
+                    Se descontaran/sumarán de la cuenta que selecciones </p>
                 </div>
             </section>
 

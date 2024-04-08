@@ -58,7 +58,7 @@ newItemForm.addEventListener('submit', (e) => {
     e.preventDefault()
 
     const item = {
-        entity: billEntitySelect.textContent,
+        entity: billEntitySelect.options[billEntitySelect.selectedIndex].textContent,
         value: billValue.value,
         icon: billIcon,
         color: billColor.value,
@@ -82,6 +82,7 @@ newItemForm.addEventListener('submit', (e) => {
 function renderItems(items) {
     itemList.innerHTML = ""
     let bal = 0
+    let billsByEntity = []
     let value
 
     items.forEach((i) => {
@@ -93,7 +94,16 @@ function renderItems(items) {
             value = i.value*usdPrice_buy
         }
         
-        bal = i.type == 'expense' ? bal - value : bal + value 
+        // Calculations
+        let entitySearch = i.entity
+        let foundObject = billsByEntity.find(obj => obj.entity === entitySearch)
+
+        if(foundObject){
+            foundObject.total = i.type == 'expense' ? foundObject.total - value : foundObject.total + value 
+        }else{
+            billsByEntity.push({entity: i.entity, total: i.type == 'expense' ? -value : value})
+        }
+
         let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
         
         itemList.innerHTML += `
@@ -102,10 +112,13 @@ function renderItems(items) {
                     <div class="icon-cnt" style="background-color: ${i.color};">
                         <img src="media/${i.icon}" alt="Icon">
                     </div>
-                    <h3>${i.entity}</h3>
+                    <div class='itemDescription'>
+                        <p>${i.description}</p>
+                        <span>${i.entity}, ${(i.date).toLocaleDateString('es-ES')}</span>
+                    </div>
                 </div>
                 <div class="item-data-cnt">
-                    <span>${formattedValue}</span>
+                    <span style='${i.type == 'expense' ? "color: red" : "color: green"}'>${formattedValue}</span>
                 </div>
             </div>
         `
@@ -130,15 +143,14 @@ function renderItems(items) {
         })
     })
 
-    return bal
+    return billsByEntity
 }
 
 // Get
 function getItems(){
     items = ipcRenderer.sendSync('getItems', "bills")
-    let totalBalance
-    totalBalance = renderItems(items)
-    return totalBalance
+    let totalBills = renderItems(items)
+    return totalBills
 }
 
 // Delete
@@ -179,9 +191,9 @@ formModal._element.addEventListener('hidden.bs.modal', function () {
 
 function editItem(){
     const item = ipcRenderer.sendSync('getItemById', selectedItem, "bills")
-    const options = billEntitySelect.options;
+    const options = billEntitySelect.options
     for (let i = 0; i < options.length; i++) {
-        if (options[i].value == item.entity) {
+        if(options[i].label == item.entity) {
             options[i].selected = true
             break
         }

@@ -11,3 +11,12 @@ entonces esta el proceso ppal y el renderer
 entonces si quiero ejecutar alguna funcion en el proceso principal tengo que relacionarla de alguna forma con el renderer (para eso remote)
 
 para obtener el precio del dolar blue, uso https://bluelytics.com.ar/#!/api
+
+
+Tareas
+Restringir formularios
+Que el formulario de edicion de balances tenga en cuenta los gasto e ingresos (tomar el valor puesto por el usuario,
+restarle el valor mostrado y esa diferencia sumarla en la bd)
+Agregar usdt a currency
+Mostrar Gastos e ingresos del mes
+Seccion deudas
