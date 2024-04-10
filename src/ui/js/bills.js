@@ -32,6 +32,11 @@ const confirmDeleteButton = document.getElementById('billConfirmDeleteButton')
 // Status 
 let editingStatus = false
 let selectedItem
+const date = new Date()
+
+// Totals
+const expenses = document.getElementById('expenses')
+const incomes = document.getElementById('incomes')
 
 // Create
 itemIconRadios.forEach((radio) => {
@@ -81,9 +86,10 @@ newItemForm.addEventListener('submit', (e) => {
 // Render
 function renderItems(items) {
     itemList.innerHTML = ""
-    let bal = 0
     let billsByEntity = []
     let value
+    let totalExpenses = 0
+    let totalIncomes = 0
 
     items.forEach((i) => {
         if((i.currency == "US$" && usdCurrency) || (i.currency == "ARS" && !usdCurrency)){
@@ -102,6 +108,14 @@ function renderItems(items) {
             foundObject.total = i.type == 'expense' ? foundObject.total - value : foundObject.total + value 
         }else{
             billsByEntity.push({entity: i.entity, total: i.type == 'expense' ? -value : value})
+        }
+
+        if((i.date.getMonth() + 1) == (date.getMonth() + 1)){
+            if(i.type == 'expense'){
+                totalExpenses += value
+            }else{
+                totalIncomes += value
+            }
         }
 
         let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
@@ -123,6 +137,11 @@ function renderItems(items) {
             </div>
         `
     })
+    
+    totalExpenses = usdCurrency ? totalExpenses.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalExpenses.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+    totalIncomes = usdCurrency ? totalIncomes.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalIncomes.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+    expenses.innerHTML = totalExpenses
+    incomes.innerHTML = totalIncomes
     
     const billItems = document.querySelectorAll('.billItem')
     billItems.forEach((i) => {

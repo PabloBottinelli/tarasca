@@ -10,6 +10,10 @@ let usdPrice_buy = 0
 const dollarBuy = document.getElementById('dollar-buy')
 const dollarSell = document.getElementById('dollar-sell')
 
+// Dates
+const incomesMonth = document.getElementById('incomesMonth')
+const expensesMonth = document.getElementById('expensesMonth')
+
 async function fetchDollarPrice() {
     try {
         const response = await fetch('https://api.bluelytics.com.ar/v2/latest')
@@ -54,6 +58,12 @@ function getAll(){
 async function init(){
     await fetchDollarPrice()  
     getAll()
+
+    const date = new Date()
+    let month = date.toLocaleString('default', { month: 'long' })
+    month = month.charAt(0).toUpperCase() + month.slice(1)
+    incomesMonth.innerHTML = `Ingresos de ${month}`
+    expensesMonth.innerHTML = `Gastos de ${month}`
 }
 
 init()
