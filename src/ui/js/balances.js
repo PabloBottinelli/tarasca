@@ -70,31 +70,34 @@ newItemForm.addEventListener('submit', (e) => {
 
 // Render
 function renderItems(items, billsByEntity){
-    itemList.innerHTML = ""
-    billsDropdownEntitys.innerHTML = ""
-    let bal = 0
-    let value
+    if(items != undefined){
+        itemList.innerHTML = ""
+        billsDropdownEntitys.innerHTML = ""
+    }
+
+    let value = 0
+    let usdBal = 0
+    let arsBal = 0
 
     items.forEach((i) => {
-        if((i.currency == "US$" && usdCurrency) || (i.currency == "ARS" && !usdCurrency)){
-            value = i.value
-        }else if(i.currency == "ARS" && usdCurrency){
-            value = i.value/usdPrice_sell
+        // Calculations
+        if(i.currency == "US$"){
+            usdBal += i.value
+            arsBal += i.value*usdPrice_buy
         }else{
-            value = i.value*usdPrice_buy
+            usdBal += i.value/usdPrice_sell
+            arsBal += i.value
+        }
+
+        let foundObject = billsByEntity.find(obj => obj.entity === i.entity)
+        if(foundObject){
+            value = i.value + foundObject.total
+        }else{
+            value = i.value
         }
         
-        // Calculations
-        bal += value
-
-        let entitySearch = i.entity
-        let foundObject = billsByEntity.find(obj => obj.entity === entitySearch)
-        if(foundObject){
-            value += foundObject.total
-            bal += foundObject.total
-        }
-
-        let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+        // Render
+        let formattedValue = i.currency == 'US$' ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
         
         itemList.innerHTML += `
             <div id="balance-${i.id}" class="item balanceItem animate__animated animate__bounceInLeft" tabindex="0">
@@ -134,7 +137,7 @@ function renderItems(items, billsByEntity){
         })
     })
 
-    return bal
+    return {usdBal, arsBal}
 }
 
 // Get

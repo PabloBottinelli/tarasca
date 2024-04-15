@@ -34,10 +34,6 @@ let editingStatus = false
 let selectedItem
 const date = new Date()
 
-// Totals
-const expenses = document.getElementById('expenses')
-const incomes = document.getElementById('incomes')
-
 // Create
 itemIconRadios.forEach((radio) => {
     radio.addEventListener('change', (e) => {
@@ -85,40 +81,47 @@ newItemForm.addEventListener('submit', (e) => {
 
 // Render
 function renderItems(items) {
-    itemList.innerHTML = ""
+    if(items.length != 0){
+        console.log(items)
+        itemList.innerHTML = ""
+    }
+
     let billsByEntity = []
-    let value
-    let totalExpenses = 0
-    let totalIncomes = 0
+    let totalExpenses = {ars: 0, usd: 0}
+    let totalIncomes = {ars: 0, usd: 0}
+    let usdValue
+    let arsValue
 
     items.forEach((i) => {
-        if((i.currency == "US$" && usdCurrency) || (i.currency == "ARS" && !usdCurrency)){
-            value = i.value
-        }else if(i.currency == "ARS" && usdCurrency){
-            value = i.value/usdPrice_sell
+        // Calculations
+        if(i.currency == "US$"){
+            usdValue = i.value
+            arsValue = i.value*usdPrice_buy
         }else{
-            value = i.value*usdPrice_buy
+            usdValue = i.value/usdPrice_sell
+            arsValue = i.value
         }
         
-        // Calculations
-        let entitySearch = i.entity
-        let foundObject = billsByEntity.find(obj => obj.entity === entitySearch)
+        let foundObject = billsByEntity.find(obj => obj.entity === i.entity)
 
         if(foundObject){
-            foundObject.total = i.type == 'expense' ? foundObject.total - value : foundObject.total + value 
+            foundObject.total = i.type == 'expense' ? foundObject.total - i.value : foundObject.total + i.value 
         }else{
-            billsByEntity.push({entity: i.entity, total: i.type == 'expense' ? -value : value})
+            billsByEntity.push({entity: i.entity, total: i.type == 'expense' ? - i.value : i.value})
         }
 
         if((i.date.getMonth() + 1) == (date.getMonth() + 1)){
             if(i.type == 'expense'){
-                totalExpenses += value
+                totalExpenses.ars += arsValue
+                totalExpenses.usd += usdValue
             }else{
-                totalIncomes += value
+                totalIncomes.ars += arsValue
+                totalIncomes.usd += usdValue
             }
         }
 
-        let formattedValue = usdCurrency ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+        // Render
+        let formattedValue = i.currency == 'US$' ? i.value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : i.value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
         
         itemList.innerHTML += `
             <div id="bill-${i.id}" class="item billItem animate__animated animate__bounceInLeft" tabindex="0">
@@ -137,11 +140,6 @@ function renderItems(items) {
             </div>
         `
     })
-    
-    totalExpenses = usdCurrency ? totalExpenses.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalExpenses.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-    totalIncomes = usdCurrency ? totalIncomes.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalIncomes.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-    expenses.innerHTML = totalExpenses
-    incomes.innerHTML = totalIncomes
     
     const billItems = document.querySelectorAll('.billItem')
     billItems.forEach((i) => {
@@ -162,7 +160,7 @@ function renderItems(items) {
         })
     })
 
-    return billsByEntity
+    return {billsByEntity, totalExpenses, totalIncomes}
 }
 
 // Get
