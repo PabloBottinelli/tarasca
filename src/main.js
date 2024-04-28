@@ -78,6 +78,26 @@ ipcMain.on('deleteItem', async(event, id, table) => {
   }
 })
 
+ipcMain.on('deleteBills', async(event, id) => {
+  try{
+    const conn = await getConnection()
+    const [result] = await conn.query('SELECT entity FROM balances WHERE id = ?', id)
+    const result2 = await conn.query('DELETE FROM bills WHERE entity = ?', result.entity)
+
+    new Notification({
+      title: 'Completado',
+      body: 'Se eliminaron los items correctamente'
+    }).show()
+    
+    event.returnValue = result2
+  }catch(error){
+    new Notification({
+      title: 'Error',
+      body: error.message
+    }).show()
+  }
+})
+
 ipcMain.on('getItemById', async(event, id, table) => {
   try{
     const conn = await getConnection()

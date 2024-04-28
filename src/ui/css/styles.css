@@ -143,6 +143,10 @@ body {
     cursor: pointer;
 }
 
+.delete-modal{
+    text-align: center;
+}
+
 /* ITEMS */
 .advice{
     font-size: 1.2rem;

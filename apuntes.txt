@@ -22,3 +22,4 @@ Mostrar Gastos e ingresos del mes
 Seccion deudas
 Al eliminar un banco se eliminan sus gastos e ingresos (avisar al confirmar eliminacion)
 Avisar al confirmar eliminacionde gasto o ingreso q se actualiza en el banco tb
+inicializar las tablas de la bd sin tener q crearlas manualmente

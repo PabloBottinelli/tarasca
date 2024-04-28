@@ -82,7 +82,6 @@ newItemForm.addEventListener('submit', (e) => {
 // Render
 function renderItems(items) {
     if(items.length != 0){
-        console.log(items)
         itemList.innerHTML = ""
     }
 

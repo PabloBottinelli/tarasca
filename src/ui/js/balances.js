@@ -70,7 +70,7 @@ newItemForm.addEventListener('submit', (e) => {
 
 // Render
 function renderItems(items, billsByEntity){
-    if(items != undefined){
+    if(items.length != 0){
         itemList.innerHTML = ""
         billsDropdownEntitys.innerHTML = ""
     }
@@ -92,6 +92,13 @@ function renderItems(items, billsByEntity){
         let foundObject = billsByEntity.find(obj => obj.entity === i.entity)
         if(foundObject){
             value = i.value + foundObject.total
+            if(i.currency == "US$"){
+                usdBal += foundObject.total
+                arsBal += foundObject.total*usdPrice_buy
+            }else{
+                usdBal += foundObject.total/usdPrice_sell
+                arsBal += foundObject.total
+            }
         }else{
             value = i.value
         }
@@ -165,7 +172,9 @@ confirmDeleteButton.addEventListener('click', function(){
 })
 
 function deleteItem(){
+    ipcRenderer.sendSync('deleteBills', selectedItem)
     ipcRenderer.sendSync('deleteItem', selectedItem, "balances")
+
     getAll()
 }
 
