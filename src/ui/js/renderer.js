@@ -1,7 +1,7 @@
 // Requires
 const balances = require('./js/balances.js')
 const bills = require('./js/bills.js')
-const debts = require('./js/debts.js')
+// const debts = require('./js/debts.js')
 
 // Dollar 
 let usdCurrency = false

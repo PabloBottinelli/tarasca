@@ -46,6 +46,21 @@ ipcMain.on('editItem', async (event, id, item, table) => {
   }
 })
 
+ipcMain.on('updateBalance', async (event, item) => {
+  try{
+    const conn = await getConnection()
+    const [result] = await conn.query('SELECT * FROM balances WHERE entity = ?', item.entity)
+    result.value = item.type == 'income' ? result.value + item.value : result.value - item.value
+    const result2 = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [result.value, result.id])
+    event.returnValue = result2    
+  }catch(error){
+    new Notification({
+      title: 'Error',
+      body: error.message
+    })
+  }
+})
+
 ipcMain.on('getItems', async (event, table) => {
   try {
     const conn = await getConnection()

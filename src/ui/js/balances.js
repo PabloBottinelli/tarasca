@@ -89,22 +89,8 @@ function renderItems(items, billsByEntity){
             arsBal += i.value
         }
 
-        let foundObject = billsByEntity.find(obj => obj.entity === i.entity)
-        if(foundObject){
-            value = i.value + foundObject.total
-            if(i.currency == "US$"){
-                usdBal += foundObject.total
-                arsBal += foundObject.total*usdPrice_buy
-            }else{
-                usdBal += foundObject.total/usdPrice_sell
-                arsBal += foundObject.total
-            }
-        }else{
-            value = i.value
-        }
-        
         // Render
-        let formattedValue = i.currency == 'US$' ? value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+        let formattedValue = i.currency == 'US$' ? i.value.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : i.value.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
         
         itemList.innerHTML += `
             <div id="balance-${i.id}" class="item balanceItem animate__animated animate__bounceInLeft" tabindex="0">
