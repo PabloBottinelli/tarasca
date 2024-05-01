@@ -8,6 +8,12 @@ ipcMain.on('createItem', async (event, item, table) => {
     item.value = parseFloat(item.value)
     const result = await conn.query('INSERT INTO ?? SET ?', [table, item])
 
+    if(table == 'bills'){
+      const [entityItem] = await conn.query('SELECT * FROM balances WHERE entity = ?', item.entity)
+      entityItem.value = item.type == 'income' ? entityItem.value + item.value : entityItem.value - item.value
+      const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entityItem.value, entityItem.id])
+    }
+
     new Notification({
       title: 'Completado',
       body: 'El item se guardo correctamente'
@@ -28,6 +34,17 @@ ipcMain.on('editItem', async (event, id, item, table) => {
   try {
     const conn = await getConnection()
     item.value = parseFloat(item.value)
+    if(table == 'bills'){
+      const [oldItem] = await conn.query('SELECT * FROM bills WHERE id = ?', id)
+      const [entity] = await conn.query('SELECT * FROM balances WHERE entity = ?', item.entity)
+      if(item.type == oldItem.type){
+        entity.value = item.type == 'income' ? entity.value - oldItem.value + item.value : entity.value + oldItem.value - item.value
+        const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entity.value, entity.id])
+      }else{
+        entity.value = item.type == 'income' ? entity.value + oldItem.value + item.value : entity.value - oldItem.value - item.value
+        const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entity.value, entity.id])
+      }
+    }
     const result = await conn.query('UPDATE ?? SET ? WHERE id = ?', [table, item, id])
 
     new Notification({
@@ -37,27 +54,11 @@ ipcMain.on('editItem', async (event, id, item, table) => {
 
     item.id = result.insertId
     event.returnValue = item
-
   } catch(error) {
     new Notification({
       title: 'Error',
       body: error.message
     }).show()
-  }
-})
-
-ipcMain.on('updateBalance', async (event, item) => {
-  try{
-    const conn = await getConnection()
-    const [result] = await conn.query('SELECT * FROM balances WHERE entity = ?', item.entity)
-    result.value = item.type == 'income' ? result.value + item.value : result.value - item.value
-    const result2 = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [result.value, result.id])
-    event.returnValue = result2    
-  }catch(error){
-    new Notification({
-      title: 'Error',
-      body: error.message
-    })
   }
 })
 

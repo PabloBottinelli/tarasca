@@ -73,7 +73,6 @@ newItemForm.addEventListener('submit', (e) => {
         ipcRenderer.sendSync('editItem', selectedItem, item, "bills")
     }else{
         ipcRenderer.sendSync('createItem', item, "bills")
-        ipcRenderer.sendSync('updateBalance', item)
     }
 
     newItemForm.reset()
