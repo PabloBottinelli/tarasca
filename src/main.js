@@ -39,11 +39,10 @@ ipcMain.on('editItem', async (event, id, item, table) => {
       const [entity] = await conn.query('SELECT * FROM balances WHERE entity = ?', item.entity)
       if(item.type == oldItem.type){
         entity.value = item.type == 'income' ? entity.value - oldItem.value + item.value : entity.value + oldItem.value - item.value
-        const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entity.value, entity.id])
       }else{
         entity.value = item.type == 'income' ? entity.value + oldItem.value + item.value : entity.value - oldItem.value - item.value
-        const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entity.value, entity.id])
       }
+      const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entity.value, entity.id])
     }
     const result = await conn.query('UPDATE ?? SET ? WHERE id = ?', [table, item, id])
 
@@ -78,6 +77,14 @@ ipcMain.on('getItems', async (event, table) => {
 ipcMain.on('deleteItem', async(event, id, table) => {
   try{
     const conn = await getConnection()
+
+    if(table == 'bills'){
+      const [item] = await conn.query('SELECT * FROM bills WHERE id = ?', id)
+      const [entity] = await conn.query('SELECT * FROM balances WHERE entity = ?', item.entity)
+      entity.value = item.type == 'income' ? entity.value - item.value : entity.value + item.value
+      const balUpdate = await conn.query('UPDATE balances SET value = ? WHERE id = ?', [entity.value, entity.id])
+    }
+
     const result = await conn.query('DELETE FROM ?? WHERE id = ?', [table, id])
 
     new Notification({

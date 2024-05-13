@@ -13,13 +13,16 @@ entonces si quiero ejecutar alguna funcion en el proceso principal tengo que rel
 para obtener el precio del dolar blue, uso https://bluelytics.com.ar/#!/api
 
 
-Tareas
-Restringir formularios
-Que el formulario de edicion de balances tenga en cuenta los gasto e ingresos (tomar el valor puesto por el usuario,
-restarle el valor mostrado y esa diferencia sumarla en la bd)
-Agregar usdt a currency
-Mostrar Gastos e ingresos del mes
-Seccion deudas
-Al eliminar un banco se eliminan sus gastos e ingresos (avisar al confirmar eliminacion)
-Avisar al confirmar eliminacionde gasto o ingreso q se actualiza en el banco tb
-inicializar las tablas de la bd sin tener q crearlas manualmente
+TAREAS
+- Restringir Formularios
+- Agregar USDT
+- Agregar Iconos
+- Que pasa con los gastos/ingresos si cambio la moneda de una entidad
+- Mostrar solo gastos e ingresos del mes
+- Pestaña con historial completo de gastos/ingresos
+- Filtros
+- Seccion Deudas
+- Avisar que al eliminar gastos/ingresos se actualiza en la entidad. Y si eliminas una entidad se borran tambien los gastos
+- Inicializar las tablas de la bd sin tener q crearlas manualmente
+- Si no hay entidades creadas no podes crear bills
+- Solo se pueden agregar gastos en moneda que coincida con la entidad

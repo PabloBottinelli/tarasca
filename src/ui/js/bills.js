@@ -81,11 +81,13 @@ newItemForm.addEventListener('submit', (e) => {
 
 // Render
 function renderItems(items) {
-    if(items.length != 0){
+    if(items.length == 0){
+        itemList.innerHTML = `<p class="advice">Acá podés agregar tus gastos o ingresos <br>
+        Se descontaran/sumarán de la cuenta que selecciones </p>`
+    }else{
         itemList.innerHTML = ""
     }
 
-    let billsByEntity = []
     let totalExpenses = {ars: 0, usd: 0}
     let totalIncomes = {ars: 0, usd: 0}
     let usdValue
@@ -100,14 +102,7 @@ function renderItems(items) {
             usdValue = i.value/usdPrice_sell
             arsValue = i.value
         }
-        
-        let foundObject = billsByEntity.find(obj => obj.entity === i.entity)
 
-        if(foundObject){
-            foundObject.total = i.type == 'expense' ? foundObject.total - i.value : foundObject.total + i.value 
-        }else{
-            billsByEntity.push({entity: i.entity, total: i.type == 'expense' ? - i.value : i.value})
-        }
 
         if((i.date.getMonth() + 1) == (date.getMonth() + 1)){
             if(i.type == 'expense'){
@@ -159,7 +154,7 @@ function renderItems(items) {
         })
     })
 
-    return {billsByEntity, totalExpenses, totalIncomes}
+    return {totalExpenses, totalIncomes}
 }
 
 // Get

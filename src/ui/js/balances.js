@@ -69,13 +69,15 @@ newItemForm.addEventListener('submit', (e) => {
 })
 
 // Render
-function renderItems(items, billsByEntity){
-    if(items.length != 0){
-        itemList.innerHTML = ""
+function renderItems(items){
+    if(items.length == 0){
+        itemList.innerHTML = `<p class="advice">Acá podés agregar los balances de tus cuentas</p>`
+        billsDropdownEntitys.innerHTML = `<option value="invalid"> No hay entidades registradas</option>`
+    }else{
         billsDropdownEntitys.innerHTML = ""
+        itemList.innerHTML = ""
     }
 
-    let value = 0
     let usdBal = 0
     let arsBal = 0
 
@@ -134,9 +136,9 @@ function renderItems(items, billsByEntity){
 }
 
 // Get
-function getItems(billsByEntity){
+function getItems(){
     items = ipcRenderer.sendSync('getItems', "balances")
-    let totalBalance = renderItems(items, billsByEntity)
+    let totalBalance = renderItems(items)
     return totalBalance
 }
 

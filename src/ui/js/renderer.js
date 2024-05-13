@@ -58,7 +58,7 @@ function getAll(){
     billsTotals = bills.getItems()
     totalExpenses = billsTotals.totalExpenses
     totalIncomes = billsTotals.totalIncomes
-    totalBalance = balances.getItems(billsTotals.billsByEntity)
+    totalBalance = balances.getItems()
     renderTotals()
 }
 
