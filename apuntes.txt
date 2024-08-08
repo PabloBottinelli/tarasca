@@ -14,15 +14,11 @@ para obtener el precio del dolar blue, uso https://bluelytics.com.ar/#!/api
 
 
 TAREAS
-- Restringir Formularios
-- Agregar USDT
-- Agregar Iconos
-- Que pasa con los gastos/ingresos si cambio la moneda de una entidad
-- Mostrar solo gastos e ingresos del mes
-- Pestaña con historial completo de gastos/ingresos
+- Cambiar datos a Balance total, flujo, deudas, saldo neto
+- Restringir Formularios - Problema con textos muy largos
 - Filtros
-- Seccion Deudas
-- Avisar que al eliminar gastos/ingresos se actualiza en la entidad. Y si eliminas una entidad se borran tambien los gastos
-- Inicializar las tablas de la bd sin tener q crearlas manualmente
-- Si no hay entidades creadas no podes crear bills
-- Solo se pueden agregar gastos en moneda que coincida con la entidad
+- Solo se pueden agregar gastos en moneda que coincida con la entidad (mmm por?)
+- Error numeros con coma
+
+- Agregar USDT
+- Pestaña con historial completo de gastos/ingresos

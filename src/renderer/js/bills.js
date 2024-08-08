@@ -93,7 +93,18 @@ function renderItems(items) {
     let usdValue
     let arsValue
 
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    let billsDateFilter = `${year}-${month}-1`
+
     items.forEach((i) => {
+        const year = i.date.getFullYear()
+        const month = String(i.date.getMonth() + 1).padStart(2, '0')
+        const day = String(i.date.getDate()).padStart(2, '0')
+        if(`${year}-${month}-${day}` < billsDateFilter){
+            return
+        }
         // Calculations
         if(i.currency == "US$"){
             usdValue = i.value
@@ -102,7 +113,6 @@ function renderItems(items) {
             usdValue = i.value/usdPrice_sell
             arsValue = i.value
         }
-
 
         if((i.date.getMonth() + 1) == (date.getMonth() + 1)){
             if(i.type == 'expense'){
@@ -121,7 +131,7 @@ function renderItems(items) {
             <div id="bill-${i.id}" class="item billItem animate__animated animate__bounceInLeft" tabindex="0">
                 <div class="item-detail">
                     <div class="icon-cnt" style="background-color: ${i.color};">
-                        <img src="media/${i.icon}" alt="Icon">
+                        <img src="../assets/icons/${i.icon}" alt="Icon">
                     </div>
                     <div class='itemDescription'>
                         <p>${i.description}</p>
@@ -142,7 +152,9 @@ function renderItems(items) {
             deleteButton.style.display = 'inline-block'
             let splittedId = event.target.id.split("-")
             let id = splittedId[1]
-            selectedItem = id
+            setTimeout(function(){ 
+                selectedItem = id
+            }, 50)
         })
 
         i.addEventListener('blur', function(event){
@@ -166,10 +178,9 @@ function getItems(){
 
 // Delete
 deleteModal._element.addEventListener('hidden.bs.modal', function () {
-    // This timeout is to avoid conflicts when sending the id to the database
     setTimeout(function(){ 
         selectedItem = null
-    }, 1000)
+    }, 50)
 })
 
 deleteButton.addEventListener('click', function(){
@@ -178,11 +189,11 @@ deleteButton.addEventListener('click', function(){
 })
 
 confirmDeleteButton.addEventListener('click', function(){
-    deleteItem()
+    deleteItem(selectedItem)
 })
 
-function deleteItem(){
-    ipcRenderer.sendSync('deleteItem', selectedItem, "bills")
+function deleteItem(id){
+    ipcRenderer.sendSync('deleteItem', id, "bills")
     getAll()
 }
 

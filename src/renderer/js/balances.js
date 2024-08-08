@@ -22,11 +22,13 @@ let itemIcon
 
 // Bills Form
 const billsDropdownEntitys = document.getElementById('billsDropdownEntitys')
+const debtsDropdownEntitys = document.getElementById('debtsDropdownEntitys')
 
 // Buttons
 const editButton = document.getElementById('balance-editButton')
 const deleteButton = document.getElementById('balance-deleteButton')
 const confirmDeleteButton = document.getElementById('balanceConfirmDeleteButton')
+const billsCreateButton = document.getElementById('bills-createButton')
 
 // Status 
 let editingStatus = false
@@ -73,9 +75,12 @@ function renderItems(items){
     if(items.length == 0){
         itemList.innerHTML = `<p class="advice">Acá podés agregar los balances de tus cuentas</p>`
         billsDropdownEntitys.innerHTML = `<option value="invalid"> No hay entidades registradas</option>`
+        debtsDropdownEntitys.innerHTML = `<option value="invalid"> No hay entidades registradas</option>`
     }else{
         billsDropdownEntitys.innerHTML = ""
+        debtsDropdownEntitys.innerHTML = ""
         itemList.innerHTML = ""
+        billsCreateButton.style.display = 'inline-block'
     }
 
     let usdBal = 0
@@ -98,7 +103,7 @@ function renderItems(items){
             <div id="balance-${i.id}" class="item balanceItem animate__animated animate__bounceInLeft" tabindex="0">
                 <div class="item-detail">
                     <div class="icon-cnt" style="background-color: ${i.color};">
-                        <img src="media/${i.icon}" alt="Icon">
+                        <img src="../assets/icons/${i.icon}" alt="Icon">
                     </div>
                     <h3>${i.entity}</h3>
                 </div>
@@ -111,6 +116,9 @@ function renderItems(items){
         billsDropdownEntitys.innerHTML += `
             <option value="${i.id}">${i.entity}</option>
         `
+        debtsDropdownEntitys.innerHTML += `
+            <option value="${i.id}">${i.entity}</option>
+        `
     })
     
     const balanceItems = document.querySelectorAll('.balanceItem')
@@ -120,7 +128,9 @@ function renderItems(items){
             deleteButton.style.display = 'inline-block'
             let splittedId = event.target.id.split("-")
             let id = splittedId[1]
-            selectedItem = id
+            setTimeout(function(){ 
+                selectedItem = id
+            }, 50)
         })
 
         i.addEventListener('blur', function(event){
@@ -144,10 +154,9 @@ function getItems(){
 
 // Delete
 deleteModal._element.addEventListener('hidden.bs.modal', function () {
-    // This timeout is to avoid conflicts when sending the id to the database
     setTimeout(function(){ 
         selectedItem = null
-    }, 1000)
+    }, 50)
 })
 
 deleteButton.addEventListener('click', function(){
@@ -156,12 +165,12 @@ deleteButton.addEventListener('click', function(){
 })
 
 confirmDeleteButton.addEventListener('click', function(){
-    deleteItem()
+    deleteItem(selectedItem)
 })
 
-function deleteItem(){
-    ipcRenderer.sendSync('deleteBills', selectedItem)
-    ipcRenderer.sendSync('deleteItem', selectedItem, "balances")
+function deleteItem(id){
+    ipcRenderer.sendSync('deleteBills', id)
+    ipcRenderer.sendSync('deleteItem', id, "balances")
 
     getAll()
 }
@@ -177,6 +186,7 @@ editButton.addEventListener('click', function() {
 formModal._element.addEventListener('hidden.bs.modal', function () {
     selectedItem = null
     editingStatus = false
+    selectedDropdownOption.disabled = false
     newItemForm.reset()
 })
 
@@ -186,6 +196,7 @@ function editItem(){
     itemValue.value = item.value
     itemColor.value = item.color
     selectedDropdownOption.textContent = item.currency
+    selectedDropdownOption.disabled = true
     itemIconRadios.forEach(function(radio){
         if(radio.value == item.icon){
             radio.checked = true

@@ -1,7 +1,7 @@
 // Requires
 const balances = require('./js/balances.js')
 const bills = require('./js/bills.js')
-// const debts = require('./js/debts.js')
+const debts = require('./js/debts.js')
 
 // Dollar 
 let usdCurrency = false
@@ -18,6 +18,7 @@ const expensesMonth = document.getElementById('expensesMonth')
 const expenses = document.getElementById('expenses')
 const incomes = document.getElementById('incomes')
 const balance = document.getElementById('balance')
+const debtsDisplay = document.getElementById('debts')
 
 async function fetchDollarPrice() {
     try {
@@ -48,17 +49,26 @@ function renderTotals(){
     incomes.innerHTML = formattedIncomes
     formattedBalance = usdCurrency ? totalBalance.usdBal.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalBalance.arsBal.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
     balance.textContent = formattedBalance
+    result = usdCurrency ? totalReceivables.usd - totalLiabilities.usd : totalReceivables.ars - totalLiabilities.ars
+    formattedDebts = usdCurrency ? result.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : result.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+    debtsDisplay.textContent = formattedDebts
 }
 
 // Get All
 let totalBalance
 let totalExpenses
 let totalIncomes
+let totalLiabilities
+let totalReceivables
 function getAll(){
     billsTotals = bills.getItems()
+    debtsTotals = debts.getItems()
     totalExpenses = billsTotals.totalExpenses
     totalIncomes = billsTotals.totalIncomes
+    totalLiabilities = debtsTotals.totalLiabilities
+    totalReceivables = debtsTotals.totalReceivables
     totalBalance = balances.getItems()
+
     renderTotals()
 }
 

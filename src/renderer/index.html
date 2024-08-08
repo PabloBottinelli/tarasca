@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.bluelytics.com.ar; script-src 'self' https://cdn.jsdelivr.net https://code.jquery.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+        <title>Tarasca</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    </head>
+    <body>
+        <header id="header">
+            <!-- TITLE AND SWITCH  -->
+            <div id="title">
+                <h1>Tu billetera</h1>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">U$D</label>
+                </div>
+            </div>
+
+            <!-- INFO -->
+            <div id="datas">
+                <div style="flex: 3;">
+                    <h2>Balance Total:</h2>
+                    <h3 id="balance"></h3>
+                </div>
+                <div style="flex: 3;">
+                    <h2 id="expensesMonth">Gastos de:</h2>
+                    <h3 id="expenses"></h3>
+                </div>
+                <div style="flex: 3;">
+                    <h2 id="incomesMonth">Ingresos de:</h2>
+                    <h3 id="incomes"></h3>
+                </div>
+                <div style="flex: 3;">
+                    <h2>Deudas Pendientes:</h2>
+                    <h3 id="debts"></h3>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <h2>Dolar:</h2>
+                    <h3 id="dollar-sell" style="font-size: 1.2rem;"></h3>
+                    <h3 id="dollar-buy" style="font-size: 1.2rem;"></h3>
+                </div>
+            </div>
+        </header>
+        <section id="main">
+            <!-- BALANCES -->
+            <section id="balance-detail" class="info-cnt">
+                <div id="balance-top" class="info-top">
+                    <h2>Balances</h2>
+                    <div id="balance-buttons" class="info-buttons">
+                        <button class="formButton" id="balance-editButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
+                            <img src="../assets/icons/pen-to-square-regular.svg" alt="">
+                        </button>
+                        <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#balancesDeleteModal">
+                            <img src="../assets/icons/trash-can-regular.svg" alt="">
+                        </button>
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
+                            <img src="../assets/icons/square-plus-regular.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div id="balance-bottom" class="info-bottom">
+                    <!-- ITEMS -->
+                </div>
+            </section>
+
+            <!-- BILLS  -->
+            <section id="bills-detail"  class="info-cnt">
+                <div id="bills-top" class="info-top">
+                    <h2>Gastos/Ingresos</h2>
+                    <div id="bills-buttons" class="info-buttons">
+                        <button class="formButton" id="bills-editButton" data-bs-toggle="modal" data-bs-target="#billsFormModal">
+                            <img src="../assets/icons/pen-to-square-regular.svg" alt="">
+                        </button>
+                        <button class="formButton" id="bills-deleteButton" data-bs-toggle="modal" data-bs-target="#billsDeleteModal">
+                            <img src="../assets/icons/trash-can-regular.svg" alt="">
+                        </button>
+                        <button type="button" class="formButton" id="bills-createButton" data-bs-toggle="modal" data-bs-target="#billsFormModal">
+                            <img src="../assets/icons/square-plus-regular.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div id="bills-bottom" class="info-bottom">
+                   <!-- ITEMS -->
+                </div>
+            </section>
+
+            <!-- DEBTS  -->
+            <section id="debts-detail"  class="info-cnt">
+                <div id="debts-top" class="info-top">
+                    <h2>Deudas</h2>
+                    <div id="debts-buttons" class="info-buttons">
+                        <button class="formButton" id="debts-payButton" data-bs-toggle="modal" data-bs-target="#debtsPayModal">
+                            <img src="../assets/icons/square-check-regular.svg" alt="">
+                        </button>
+                        <button class="formButton" id="debts-editButton" data-bs-toggle="modal" data-bs-target="#debtsFormModal">
+                            <img src="../assets/icons/pen-to-square-regular.svg" alt="">
+                        </button>
+                        <button class="formButton" id="debts-deleteButton" data-bs-toggle="modal" data-bs-target="#debtsDeleteModal">
+                            <img src="../assets/icons/trash-can-regular.svg" alt="">
+                        </button>
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#debtsFormModal">
+                            <img src="../assets/icons/square-plus-regular.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div id="debts-bottom" class="info-bottom">
+                   <!-- ITEMS -->
+
+                </div>
+            </section>
+        </section>
+        
+        <!-- Balance Form Modal -->
+        <div class="modal fade" id="balanceFormModal" tabindex="-1" aria-labelledby="balanceFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="balanceModalDialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="balanceFormModalLabel">Nuevo Saldo</h1>
+                        <button id="balanceFormCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="balanceNewItemForm">
+                            <div class="mb-3">
+                                <label for="balanceEntity" class="form-label">Entidad</label>
+                                <input type="text" class="form-control" id="balanceEntity">
+                            </div>
+                            <div class="input-group mb-3">
+                                <label for="balanceValue" class="form-label">Valor</label>
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="balanceValue">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="balanceSelectedDropdownOption">ARS</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" id="balanceDropdownARS">ARS</a></li>
+                                    <li><a class="dropdown-item" id="balanceDropdownUSD">US$</a></li>
+                                </ul>
+                                <div id="passwordHelpBlock" class="form-text">
+                                    La moneda no podrá ser cambiada al editar esta entidad.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="icon" class="form-label">Icono</label>
+                                <div class="radio-cnt">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="bitcoin-sign-solid.svg">
+                                        <label class="form-check-label" for="bitcoin"><img src="../assets/icons/bitcoin-sign-solid.svg" alt=""></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="building-columns-solid.svg">
+                                        <label class="form-check-label" for="columns"><img src="../assets/icons/building-columns-solid.svg" alt=""></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <label class="form-check-label" for="chart"><img src="../assets/icons/chart-simple-solid.svg" alt=""></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="balanceColor" class="form-label">Color</label>
+                                <input type="color" class="form-control form-control-color" id="balanceColor" value="#563d7c" title="Color">       
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="balanceFormCloseButton">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" form="balanceNewItemForm" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bills Form Modal -->
+        <div class="modal fade" id="billsFormModal" tabindex="-1" aria-labelledby="billsFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="bills-modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="billsFormModalLabel">Nuevo Gasto/Ingreso</h1>
+                        <button id="billsFormCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="billsNewItemForm">
+                            <label for="billsDropdownEntitys" class="form-label">Entidad</label>
+                            <select class="form-select mb-3" id="billsDropdownEntitys">
+                                <option>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <div class="input-group mb-3">
+                                <label for="billsValue" class="form-label">Valor</label>
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="billsValue">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="billsSelectedDropdownOption">ARS</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" id="billsDropdownARS">ARS</a></li>
+                                    <li><a class="dropdown-item" id="billsDropdownUSD">US$</a></li>
+                                </ul>
+                            </div>
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Tipo</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="billsTypeOptions" value="expense">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Gasto
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="billsTypeOptions" value="income">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Ingreso
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="icon" class="form-label">Icono</label>
+                                <div class="radio-cnt">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="bitcoin-sign-solid.svg">
+                                        <label class="form-check-label" for="bitcoin"><img src="../assets/icons/bitcoin-sign-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="building-columns-solid.svg">
+                                        <label class="form-check-label" for="columns"><img src="../assets/icons/building-columns-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <label class="form-check-label" for="chart"><img src="../assets/icons/chart-simple-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="award-solid.svg">
+                                        <label class="form-check-label" for="award"><img src="../assets/icons/award-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="bag-shopping-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/bag-shopping-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="bolt-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/bolt-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="book-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/book-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="brush-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/brush-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="calendar-days-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/calendar-days-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="car-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/car-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="cash-register-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cash-register-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="cc-amex.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cc-amex.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="cc-mastercard.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cc-mastercard.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="cc-visa.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cc-visa.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/chart-simple-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="credit-card-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/credit-card-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="desktop-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/desktop-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="dice-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/dice-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="droplet-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/droplet-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="dumbbell-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/dumbbell-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="face-smile-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/face-smile-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="filter-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/filter-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="gas-pump-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/gas-pump-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="gift-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/gift-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="guitar-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/guitar-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="hammer-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/hammer-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="hospital-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/hospital-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="hotel-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/hotel-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="house-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/house-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="ice-cream-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/ice-cream-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="laptop-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/laptop-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="lightbulb-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/lightbulb-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="martini-glass-citrus-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/martini-glass-citrus-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="masks-theater-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/masks-theater-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="medal-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/medal-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="mobile-screen-button-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/mobile-screen-button-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="money-bills-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/money-bills-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="utensils-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/utensils-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="wallet-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/wallet-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="wifi-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/wifi-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="wrench-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/wrench-solid.svg" alt=""></label>
+                                    </div>       
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="mug-hot-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/mug-hot-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="music-saucer-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/mug-saucer-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="paint-roller-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/paint-roller-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="paw-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/paw-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="paypal.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/paypal.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="pen-to-square-regular.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/pen-to-square-regular.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="phone-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/phone-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="plane-departure-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/plane-departure-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="plane-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/plane-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="playstation.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/playstation.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="school-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/school-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="shirt-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/shirt-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="shop-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/shop-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="spotify.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/spotify.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="square-plus-regular.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/square-plus-regular.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="square-youtube.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/square-youtube.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="stethoscope-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/stethoscope-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="store-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/store-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="suitcase-rolling-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/suitcase-rolling-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="tag-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/tag-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="taxi-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/taxi-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="train-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/train-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="trash-can-regular.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/trash-can-regular.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="trophy-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/trophy-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="truck-fast-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/truck-fast-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="billsInlineRadioOptions" value="truck-medical-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/truck-medical-solid.svg" alt=""></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="billsColor" class="form-label">Color</label>
+                                <input type="color" class="form-control form-control-color" id="billsColor" value="#563d7c" title="Color">       
+                            </div>
+                            <div class="mb-3">
+                                <label for="billsDescription" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="billsDescription">
+                            </div>
+                            <div class="mb-3">
+                                <label for="billsDate" class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="billsDate">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="billsFormCloseButton">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" form="billsNewItemForm" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debts Form Modal -->
+        <div class="modal fade" id="debtsFormModal" tabindex="-1" aria-labelledby="debtsFormModalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="debts-modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="debtsFormModalLabel">Nueva Deuda</h1>
+                        <button id="debtsFormCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="debtsNewItemForm">
+                            <div class="mb-3">
+                                <label for="debtEntity" class="form-label">Entidad</label>
+                                <input type="text" class="form-control" id="debtEntity">
+                            </div>
+                            <div class="input-group mb-3">
+                                <label for="debtValue" class="form-label">Valor</label>
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="debtValue">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="debtSelectedDropdownOption">ARS</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" id="debtDropdownARS">ARS</a></li>
+                                    <li><a class="dropdown-item" id="debtDropdownUSD">US$</a></li>
+                                </ul>
+                            </div>
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Tipo</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="debtsTypeOptions" value="liabilitie">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Obligación
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="debtsTypeOptions" value="receivable">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Crédito
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="icon" class="form-label">Icono</label>
+                                <div class="radio-cnt">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="bitcoin-sign-solid.svg">
+                                        <label class="form-check-label" for="bitcoin"><img src="../assets/icons/bitcoin-sign-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="building-columns-solid.svg">
+                                        <label class="form-check-label" for="columns"><img src="../assets/icons/building-columns-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <label class="form-check-label" for="chart"><img src="../assets/icons/chart-simple-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="award-solid.svg">
+                                        <label class="form-check-label" for="award"><img src="../assets/icons/award-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="bag-shopping-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/bag-shopping-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="bolt-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/bolt-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="book-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/book-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="brush-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/brush-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="calendar-days-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/calendar-days-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="car-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/car-solid.svg" alt=""></label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="cash-register-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cash-register-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="cc-amex.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cc-amex.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="cc-mastercard.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cc-mastercard.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="cc-visa.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/cc-visa.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/chart-simple-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="credit-card-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/credit-card-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="desktop-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/desktop-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="dice-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/dice-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="droplet-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/droplet-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="dumbbell-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/dumbbell-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="face-smile-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/face-smile-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="filter-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/filter-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="gas-pump-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/gas-pump-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="gift-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/gift-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="guitar-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/guitar-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="hammer-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/hammer-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="hospital-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/hospital-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="hotel-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/hotel-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="house-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/house-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="ice-cream-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/ice-cream-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="laptop-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/laptop-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="lightbulb-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/lightbulb-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="martini-glass-citrus-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/martini-glass-citrus-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="masks-theater-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/masks-theater-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="medal-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/medal-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="mobile-screen-button-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/mobile-screen-button-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="money-bills-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/money-bills-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="utensils-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/utensils-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="wallet-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/wallet-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="wifi-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/wifi-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="wrench-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/wrench-solid.svg" alt=""></label>
+                                    </div>       
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="mug-hot-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/mug-hot-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="music-saucer-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/mug-saucer-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="paint-roller-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/paint-roller-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="paw-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/paw-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="paypal.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/paypal.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="pen-to-square-regular.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/pen-to-square-regular.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="phone-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/phone-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="plane-departure-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/plane-departure-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="plane-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/plane-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="playstation.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/playstation.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="school-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/school-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="shirt-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/shirt-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="shop-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/shop-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="spotify.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/spotify.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="square-plus-regular.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/square-plus-regular.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="square-youtube.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/square-youtube.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="stethoscope-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/stethoscope-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="store-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/store-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="suitcase-rolling-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/suitcase-rolling-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="tag-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/tag-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="taxi-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/taxi-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="train-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/train-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="trash-can-regular.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/trash-can-regular.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="trophy-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/trophy-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="truck-fast-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/truck-fast-solid.svg" alt=""></label>
+                                    </div>
+                                    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="debtsInlineRadioOptions" value="truck-medical-solid.svg">
+                                        <label class="form-check-label"><img src="../assets/icons/truck-medical-solid.svg" alt=""></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="debtColor" class="form-label">Color</label>
+                                <input type="color" class="form-control form-control-color" id="debtColor" value="#563d7c" title="Color">       
+                            </div>
+                            <div class="mb-3">
+                                <label for="debtDate" class="form-label">Fecha límite</label>
+                                <input type="date" class="form-control" id="debtDate">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="debtsFormCloseButton">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" form="debtsNewItemForm" data-bs-dismiss="modal">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Balance Delete Modal -->
+        <div class="modal" tabindex="-1" id="balancesDeleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body delete-modal">
+                        <p>¿Seguro que deseas eliminar este item?</p>
+                        <p>Se eliminaran todos los gastos/ingresos correspondientes.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="balanceConfirmDeleteButton">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill Delete Modal -->
+        <div class="modal" tabindex="-1" id="billsDeleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body delete-modal">
+                        <p>¿Seguro que deseas eliminar este item?</p>
+                        <p>Se agregará/descontará el monto en la cuenta correspondiente.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="billConfirmDeleteButton">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debt Delete Modal -->
+        <div class="modal" tabindex="-1" id="debtsDeleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body delete-modal">
+                        <p>¿Seguro que deseas eliminar este item?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="debtConfirmDeleteButton">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debts Pay Modal -->
+        <div class="modal fade" id="debtsPayModal" tabindex="-1" aria-labelledby="debtsPayModalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="debts-modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="debtsPayModalLabel">Marcar como pagado</h1>
+                        <button id="debtsPayCloseButton2" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="debtsPayForm">
+                            <label for="debtsDropdownEntitys" class="form-label">Entidad</label>
+                            <select class="form-select mb-3" id="debtsDropdownEntitys">
+                                <option>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="debtsPayCloseButton">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" form="debtsPayForm" data-bs-dismiss="modal" id="confirmPayButton">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/renderer.js"></script>
+    </body>
+</html>

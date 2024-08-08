@@ -62,6 +62,15 @@ body {
     font-size: 1.6rem;
 }
 
+.dropdown-toggle{
+    color: rgb(28, 28, 28);
+    font-weight: 600;
+}
+.dropdown-toggle:disabled{
+    color: rgb(28, 28, 28);
+    font-weight: 600;
+}
+
 /* MAIN */
 
 #main {
@@ -104,7 +113,7 @@ body {
     padding: 0 25px 25px 25px;
 }
 
-#bills-editButton, #bills-deleteButton, #balance-editButton, #balance-deleteButton, #debts-editButton, #debts-deleteButton{
+#bills-editButton, #bills-deleteButton, #balance-editButton, #balance-deleteButton, #debts-editButton, #debts-deleteButton, #debts-payButton, #bills-createButton{
     display: none;
 }
 
@@ -209,6 +218,7 @@ body {
     align-self: center;
     color: rgb(22, 22, 22);
     margin-bottom: 0;
+    overflow: hidden;
 }
 
 .item-data-cnt {
