@@ -1,6 +1,7 @@
 const {BrowserWindow, screen, Notification, ipcMain} = require('electron')
 const { setMainMenu } = require('../renderer/js/menu.js')
 const { deleteItem, updateItem, updateItemColumn, selectAll, selectItem, selectItemColumn, createItem } = require('./database.js')
+const path = require('path')
 
 ipcMain.on('createItem', async (event, item, table) => {
   try {
@@ -8,7 +9,7 @@ ipcMain.on('createItem', async (event, item, table) => {
 
     if(table == 'bills'){
       const entityItem = await selectItem('balances', 'entity', item.entity)
-      entityItem.value = item.type == 'income' ? entityItem.value + item.value : entityItem.value - item.value
+      entityItem.value = item.type == 'income' ? entityItem.value + parseInt(item.value) : entityItem.value - parseInt(item.value)
       await updateItemColumn('balances', 'value', entityItem.value, entityItem.id)
     }
 
@@ -179,6 +180,8 @@ function createWindow() {
   const window = new BrowserWindow({
     width: dimensions.width,
     height: dimensions.height,
+    autoHideMenuBar: true,
+    icon: path.join(__dirname, '../assets/icon/tarasca.png'),
     webPreferences: { 
       nodeIntegration: true, // para poder importar modulos de node dentro de la ventana
       contextIsolation: false,
@@ -190,7 +193,7 @@ function createWindow() {
   window.loadFile('src/renderer/index.html')
 }
 
-setMainMenu()
+// setMainMenu()
 
 module.exports = {
   createWindow

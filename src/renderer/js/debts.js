@@ -8,7 +8,6 @@ const newItemForm = document.getElementById('debtsNewItemForm')
 // Modals
 const formModal = new bootstrap.Modal(document.getElementById('debtsFormModal'))
 const deleteModal = new bootstrap.Modal(document.getElementById('debtsDeleteModal'))
-const payModal = new bootstrap.Modal(document.getElementById('debtsPayModal'))
 
 // Form Inputs
 const debtEntitySelect = document.getElementById('debtsDropdownEntitys')
@@ -95,6 +94,8 @@ function renderItems(items) {
     let arsValue
 
     items.forEach((i) => {
+        const itemDate = new Date(i.date)
+
         // Calculations
         if(i.currency == "US$"){
             usdValue = i.value
@@ -104,7 +105,7 @@ function renderItems(items) {
             arsValue = i.value
         }
 
-        if((i.date.getMonth() + 1) == (date.getMonth() + 1)){
+        if((itemDate.getMonth() + 1) == (date.getMonth() + 1)){
             if(i.type == 'liabilitie'){
                 totalLiabilities.ars += arsValue
                 totalLiabilities.usd += usdValue
@@ -125,7 +126,7 @@ function renderItems(items) {
                     </div>
                     <div class='itemDescription'>
                         <p>${i.entity}</p>
-                        <span>Pagar el: ${(i.date).toLocaleDateString('es-ES')}</span>
+                        <span>Pagar el: ${(itemDate).toLocaleDateString('es-ES')}</span>
                     </div>
                 </div>
                 <div class="item-data-cnt">
@@ -208,10 +209,11 @@ formModal._element.addEventListener('hidden.bs.modal', function () {
 
 function editItem(){
     const item = ipcRenderer.sendSync('getItemById', selectedItem, "debts")
+    const itemDate = new Date(item.date)
     debtEntity.value = item.entity
     debtValue.value = item.value
     debtColor.value = item.color
-    debtDate.value = (item.date).toISOString().split('T')[0]
+    debtDate.value = (itemDate).toISOString().split('T')[0]
     selectedDropdownOption.textContent = item.currency
     itemIconRadios.forEach(function(radio){
         if(radio.value == item.icon){

@@ -96,12 +96,13 @@ function renderItems(items) {
     const currentDate = new Date()
     const year = currentDate.getFullYear()
     const month = String(currentDate.getMonth() + 1).padStart(2, '0')
-    let billsDateFilter = `${year}-${month}-1`
+    let billsDateFilter = `${year}-${month}-01`
 
     items.forEach((i) => {
-        const year = i.date.getFullYear()
-        const month = String(i.date.getMonth() + 1).padStart(2, '0')
-        const day = String(i.date.getDate()).padStart(2, '0')
+        const itemDate = new Date(i.date)
+        const year = itemDate.getFullYear()
+        const month = String(itemDate.getMonth() + 1).padStart(2, '0')
+        const day = String(itemDate.getDate()).padStart(2, '0')
         if(`${year}-${month}-${day}` < billsDateFilter){
             return
         }
@@ -114,7 +115,7 @@ function renderItems(items) {
             arsValue = i.value
         }
 
-        if((i.date.getMonth() + 1) == (date.getMonth() + 1)){
+        if((itemDate.getMonth() + 1) == (date.getMonth() + 1)){
             if(i.type == 'expense'){
                 totalExpenses.ars += arsValue
                 totalExpenses.usd += usdValue
@@ -135,7 +136,7 @@ function renderItems(items) {
                     </div>
                     <div class='itemDescription'>
                         <p>${i.description}</p>
-                        <span>${i.entity}, ${(i.date).toLocaleDateString('es-ES')}</span>
+                        <span>${i.entity}, ${(itemDate).toLocaleDateString('es-ES')}</span>
                     </div>
                 </div>
                 <div class="item-data-cnt">
@@ -213,6 +214,7 @@ formModal._element.addEventListener('hidden.bs.modal', function () {
 
 function editItem(){
     const item = ipcRenderer.sendSync('getItemById', selectedItem, "bills")
+    const itemDate = new Date(item.date)
     const options = billEntitySelect.options
     for (let i = 0; i < options.length; i++) {
         if(options[i].label == item.entity) {
@@ -223,7 +225,7 @@ function editItem(){
     billValue.value = item.value
     billColor.value = item.color
     billDescription.value = item.description
-    billDate.value = (item.date).toISOString().split('T')[0]
+    billDate.value = (itemDate).toISOString().split('T')[0]
     selectedDropdownOption.textContent = item.currency
     itemIconRadios.forEach(function(radio){
         if(radio.value == item.icon){

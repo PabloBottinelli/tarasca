@@ -19,16 +19,19 @@ const selectedDropdownOption = document.getElementById('balanceSelectedDropdownO
 const dropdownARS = document.getElementById('balanceDropdownARS')
 const dropdownUSD = document.getElementById('balanceDropdownUSD')
 let itemIcon
+const inputs = newItemForm.querySelectorAll('input[required]')
 
 // Bills Form
 const billsDropdownEntitys = document.getElementById('billsDropdownEntitys')
 const debtsDropdownEntitys = document.getElementById('debtsDropdownEntitys')
 
 // Buttons
+const saveButton = document.getElementById('balanceSaveFormButton')
 const editButton = document.getElementById('balance-editButton')
 const deleteButton = document.getElementById('balance-deleteButton')
 const confirmDeleteButton = document.getElementById('balanceConfirmDeleteButton')
 const billsCreateButton = document.getElementById('bills-createButton')
+const newEntityButton = document.getElementById('newEntityButton')
 
 // Status 
 let editingStatus = false
@@ -47,6 +50,33 @@ dropdownARS.addEventListener('click', function(){
 
 dropdownUSD.addEventListener('click', function(){
     selectedDropdownOption.textContent = 'US$'
+})
+
+function validateForm(){
+    let isValid = true
+
+    inputs.forEach(input => {
+        if (!input.checkValidity()) {
+            isValid = false
+        }
+    })
+
+    saveButton.disabled = !isValid
+}
+
+inputs.forEach(input => {
+    input.addEventListener('input', validateForm)
+})
+
+newItemForm.addEventListener('submit', function(event) {
+    if (!newItemForm.checkValidity()) {
+        event.preventDefault()
+        alert('Por favor, completá todos los campos correctamente.')
+    }
+})
+
+newEntityButton.addEventListener('click', (e) =>{
+    validateForm()
 })
 
 newItemForm.addEventListener('submit', (e) => {

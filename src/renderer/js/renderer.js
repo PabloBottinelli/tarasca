@@ -11,12 +11,11 @@ const dollarBuy = document.getElementById('dollar-buy')
 const dollarSell = document.getElementById('dollar-sell')
 
 // Dates
-const incomesMonth = document.getElementById('incomesMonth')
-const expensesMonth = document.getElementById('expensesMonth')
+const flowMonth = document.getElementById('flowMonth')
 
 // Totals
-const expenses = document.getElementById('expenses')
-const incomes = document.getElementById('incomes')
+const flow = document.getElementById('flow')
+const net = document.getElementById('net')
 const balance = document.getElementById('balance')
 const debtsDisplay = document.getElementById('debts')
 
@@ -43,15 +42,15 @@ switchButton.addEventListener('click', function(){
 
 // Render Totals
 function renderTotals(){
-    formattedExpenses = usdCurrency ? totalExpenses.usd.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalExpenses.ars.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-    expenses.innerHTML = formattedExpenses
-    formattedIncomes = usdCurrency ? totalIncomes.usd.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalIncomes.ars.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
-    incomes.innerHTML = formattedIncomes
+    formattedFlow = usdCurrency ? (totalIncomes.usd - totalExpenses.usd).toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : (totalIncomes.ars - totalExpenses.ars).toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+    flow.innerHTML = formattedFlow
     formattedBalance = usdCurrency ? totalBalance.usdBal.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : totalBalance.arsBal.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
     balance.textContent = formattedBalance
     result = usdCurrency ? totalReceivables.usd - totalLiabilities.usd : totalReceivables.ars - totalLiabilities.ars
     formattedDebts = usdCurrency ? result.toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : result.toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
     debtsDisplay.textContent = formattedDebts
+    formattedNet = usdCurrency ? (totalBalance.usdBal + totalReceivables.usd - totalLiabilities.usd).toLocaleString('es-ES', { style: 'currency', currency: 'USD' }) : (totalBalance.arsBal + totalReceivables.ars - totalLiabilities.ars).toLocaleString('es-ES', { style: 'currency', currency: 'ARS' })
+    net.innerHTML = formattedNet
 }
 
 // Get All
@@ -68,7 +67,6 @@ function getAll(){
     totalLiabilities = debtsTotals.totalLiabilities
     totalReceivables = debtsTotals.totalReceivables
     totalBalance = balances.getItems()
-
     renderTotals()
 }
 
@@ -80,8 +78,7 @@ async function init(){
     date = new Date()
     month = date.toLocaleString('default', { month: 'long' })
     month = month.charAt(0).toUpperCase() + month.slice(1)
-    incomesMonth.innerHTML = `Ingresos de ${month}`
-    expensesMonth.innerHTML = `Gastos de ${month}`
+    flowMonth.innerHTML = `Flujo de ${month}`
 }
 
 init()

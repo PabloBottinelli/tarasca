@@ -24,20 +24,20 @@
             <!-- INFO -->
             <div id="datas">
                 <div style="flex: 3;">
-                    <h2>Balance Total:</h2>
+                    <h2>Balance Total</h2>
                     <h3 id="balance"></h3>
                 </div>
                 <div style="flex: 3;">
-                    <h2 id="expensesMonth">Gastos de:</h2>
-                    <h3 id="expenses"></h3>
+                    <h2 id="flowMonth">Flujo de</h2>
+                    <h3 id="flow"></h3>
                 </div>
                 <div style="flex: 3;">
-                    <h2 id="incomesMonth">Ingresos de:</h2>
-                    <h3 id="incomes"></h3>
-                </div>
-                <div style="flex: 3;">
-                    <h2>Deudas Pendientes:</h2>
+                    <h2>Deudas Pendientes</h2>
                     <h3 id="debts"></h3>
+                </div>
+                <div style="flex: 3;">
+                    <h2>Saldo Neto</h2>
+                    <h3 id="net"></h3>
                 </div>
                 <div style="flex: 1; text-align: center;">
                     <h2>Dolar:</h2>
@@ -58,7 +58,7 @@
                         <button class="formButton" id="balance-deleteButton" data-bs-toggle="modal" data-bs-target="#balancesDeleteModal">
                             <img src="../assets/icons/trash-can-regular.svg" alt="">
                         </button>
-                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal">
+                        <button type="button" class="formButton" data-bs-toggle="modal" data-bs-target="#balanceFormModal" id="newEntityButton">
                             <img src="../assets/icons/square-plus-regular.svg" alt="">
                         </button>
                     </div>
@@ -127,12 +127,12 @@
                         <form action="" id="balanceNewItemForm">
                             <div class="mb-3">
                                 <label for="balanceEntity" class="form-label">Entidad</label>
-                                <input type="text" class="form-control" id="balanceEntity">
+                                <input type="text" class="form-control" id="balanceEntity" maxlength="20" required>
                             </div>
                             <div class="input-group mb-3">
                                 <label for="balanceValue" class="form-label">Valor</label>
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="balanceValue">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="balanceSelectedDropdownOption">ARS</button>
+                                <input type="number" class="form-control valueInput" aria-label="Text input with dropdown button" id="balanceValue" step="0.0001" required>
+                                <button class="btn btn-outline-secondary dropdown-toggle currencyButton" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="balanceSelectedDropdownOption">ARS</button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" id="balanceDropdownARS">ARS</a></li>
                                     <li><a class="dropdown-item" id="balanceDropdownUSD">US$</a></li>
@@ -145,28 +145,28 @@
                                 <label for="icon" class="form-label">Icono</label>
                                 <div class="radio-cnt">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="bitcoin-sign-solid.svg">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="bitcoin-sign-solid.svg" required>
                                         <label class="form-check-label" for="bitcoin"><img src="../assets/icons/bitcoin-sign-solid.svg" alt=""></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="building-columns-solid.svg">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="building-columns-solid.svg" required>
                                         <label class="form-check-label" for="columns"><img src="../assets/icons/building-columns-solid.svg" alt=""></label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="chart-simple-solid.svg">
+                                        <input class="form-check-input" type="radio" name="balanceInlineRadioOptions" value="chart-simple-solid.svg" required>
                                         <label class="form-check-label" for="chart"><img src="../assets/icons/chart-simple-solid.svg" alt=""></label>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <label for="balanceColor" class="form-label">Color</label>
-                                <input type="color" class="form-control form-control-color" id="balanceColor" value="#563d7c" title="Color">       
+                                <input type="color" class="form-control form-control-color" id="balanceColor" value="#563d7c" title="Color" required>       
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="balanceFormCloseButton">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" form="balanceNewItemForm" data-bs-dismiss="modal">Guardar</button>
+                        <button type="submit" class="btn btn-primary" form="balanceNewItemForm" data-bs-dismiss="modal" id="balanceSaveFormButton">Guardar</button>
                     </div>
                 </div>
             </div>
