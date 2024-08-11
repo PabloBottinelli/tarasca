@@ -14,7 +14,6 @@ para obtener el precio del dolar blue, uso https://bluelytics.com.ar/#!/api
 
 
 TAREAS
-- Cambiar datos a Balance total, flujo, deudas, saldo neto
 - Restringir Formularios - Problema con textos muy largos
 - Filtros
 - Solo se pueden agregar gastos en moneda que coincida con la entidad (mmm por?)

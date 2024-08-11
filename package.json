@@ -1,18 +1,49 @@
 {
   "name": "tarasca-js2",
   "version": "1.0.0",
-  "description": "",
   "main": "src/main/index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
+  "build": {
+    "appId": "com.bottinelliApps.tarasca",
+    "productName": "Tarasca",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon/tarasca.png"
+    },
+    "mac": {
+      "icon": "assets/icon/tarasca.png"
+    },
+    "linux": {
+      "icon": "assets/icon/tarasca.png"
+    }
+  },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "electron": "^29.1.0",
     "electron-reload": "^2.0.0-alpha.1",
-    "promise-mysql": "^5.2.0"
+    "electron-squirrel-startup": "^1.0.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^31.3.1"
   }
 }
