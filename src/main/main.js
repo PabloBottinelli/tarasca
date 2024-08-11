@@ -184,7 +184,7 @@ function createWindow() {
     icon: path.join(__dirname, '../assets/icon/tarasca.png'),
     webPreferences: { 
       nodeIntegration: true, // para poder importar modulos de node dentro de la ventana
-      contextIsolation: false,
+      contextIsolation: true,
       nodeIntegrationInWorker: true,
       enableRemoteModule: true
     }
